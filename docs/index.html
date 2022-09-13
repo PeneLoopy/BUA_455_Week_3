@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>BUA 455 - Week 3</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Penelope Pooler Eisenbies" />
+    <meta name="date" content="2022-09-13" />
+    <script src="docs_files/header-attrs/header-attrs.js"></script>
+    <link href="docs_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="docs_files/panelset/panelset.js"></script>
+    <link href="docs_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="docs_files/tile-view/tile-view.js"></script>
+    <script src="docs_files/xaringanExtra_fit-screen/fit-screen.js"></script>
+    <link href="docs_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="docs_files/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <script src="docs_files/kePrint/kePrint.js"></script>
+    <link href="docs_files/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+background-image: url("docs_files/images/sloth_faded.png")
+background-size: cover
+
+class: bottom, right
+
+## BUA 455 - Week 3
+
+### Reshaping and Summarizing Data  
+
+&lt;br&gt;
+
+
+#### Penelope Pooler Eisenbies
+
+#### 2022-09-13
+
+[Wikipedia Sloth Page](https://en.wikipedia.org/wiki/Sloth)
+
+---
+
+
+### Reminders:
+
+#### HW 2 is Due 9/14
+
+.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3.mt2.mb2[
+
+Textbook: A [list of useful sections can be found here](https://docs.Google.com/spreadsheets/d/1yhUSJAJQ4VVjVBpiv3_C2D3tQs2SmJjynSq9chqXOwc/edit?usp=sharing) and will be updated as the course progresses.
+
+]
+
+#### Reminders from Week 2 and HW 2:
+
+#####`dplyer` commands:
+
+  - `select`  - used to select variables (columns) of a dataset
+  - `slice`   - used to select rows by row number
+  - `filter`  - used to filter data rows by values of a variable
+  - `mutate`  - to create or transform a variable
+  
+##### `ggplot` introduction:
+
+  - basic syntax and aesethetics statements (`aes`)
+  - creating a basic boxplot (`geom_boxplot`) or scatterplot (`geom_point`)
+  - removing default background by modifying the theme
+  - adding a a third categorical variable to color the data by category
+  
+---
+
+### New Skills in Week 3 (and HW 3)
+
+- Importing a 'clean' dataset
+    - After Quiz 1 we'll cover how to clean 'messy' data 
+
+- Creating a character or factor variable
+  
+- Coercing data to be a new data type
+  
+- Summarizing data and reshaping data for a summary table
+  
+- Reshaping data for a plot
+
+  
+#### Preview of 'cleaning' messy
+
+- Examine Raw Messy Data
+   - remove non-data rows at the top with skip
+   - select variables and filter data rows
+   - remove nuisance characters like `$` and `,`
+   - work with date information variables
+   - export and save a clean dataset
+
+---
+
+
+.panelset[
+
+.panel[.panel-name[**Original Data**]
+
+Online Data are often formatted for viewing, not using.
+
+- Details that make online data viewing easier, have to be removed for data management.
+
+.center[
+
+![Box Office Mojo daily data from 2021](docs_files/images/bom21_screenshot.png)
+
+]
+
+[Data Source: Box Office Mojo](https://www.boxofficemojo.com/daily/2021/?view=year)
+
+]
+
+.panel[.panel-name[**Raw Data (.csv)**]
+
+Copying data from a website and saving them as a .csv file (CSV UTF-8) removes most of the formatting, but data cleaning is still required.
+
+.center[
+
+![Box Office Mojo daily data from 2021 saved as .csv file](docs_files/images/bom21_rawdata_screenshot.png){height=65%}
+]
+
+]
+
+.panel[.panel-name[**Import, Select, Filter**]
+
+- `read_csv` imports the raw data and skips the first 11 rows (above the variable names).
+
+- `filter` is used to filter out rows that don't contain data
+
+- `select` is used to select only the variables we need
+
+- `rename` (new command) is used to make the variable names easier to work with
+
+- `head` is one of many options for examining the data
+
+
+```r
+bom21 &lt;- read_csv("box_office_mojo_2021.csv", skip=11, show_col_types = FALSE) |&gt;
+  filter(!is.na(Day)) |&gt;
+  select(Date, `Top 10 Gross`, Gross, Releases, `#1 Release`) |&gt;
+  rename(date=Date, top10gross = `Top 10 Gross`, 
+         num_releases=Releases, num1gross=Gross, num1 = `#1 Release`) 
+head(bom21)
+```
+
+```
+## # A tibble: 6 × 5
+##   date   top10gross  num1gross   num_releases num1                   
+##   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;                  
+## 1 31-Dec $27,601,787 $15,407,695           25 Spider-Man: No Way Home
+## 2 30-Dec $35,021,475 $20,717,908           26 Spider-Man: No Way Home
+## 3 29-Dec $34,092,399 $20,327,774           26 Spider-Man: No Way Home
+## 4 28-Dec $36,104,760 $21,346,817           25 Spider-Man: No Way Home
+## 5 27-Dec $39,209,841 $24,770,593           25 Spider-Man: No Way Home
+## 6 26-Dec $52,943,454 $33,283,250           27 Spider-Man: No Way Home
+```
+
+]
+
+.panel[.panel-name[**Clean Numeric Data**]
+
+- The two **Gross** variables both contained `$` and `,` symbols that were removed with `gsub`.
+
+- Each variable was then converted to numeric with `as.numeric`.
+
+
+```r
+bom21 &lt;- bom21 |&gt;
+  mutate(top10gross = gsub(x=top10gross, pattern="$", replacement="", fixed=T),
+         top10gross = gsub(x=top10gross, pattern=",", replacement="", fixed=T) |&gt; 
+           as.numeric(),
+         
+         num1gross = gsub(x=num1gross, pattern="$", replacement="", fixed=T),
+         num1gross = gsub(x=num1gross, pattern=",", replacement="", fixed=T) |&gt; 
+           as.numeric())
+head(bom21)
+```
+
+```
+## # A tibble: 6 × 5
+##   date   top10gross num1gross num_releases num1                   
+##   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt;                  
+## 1 31-Dec   27601787  15407695           25 Spider-Man: No Way Home
+## 2 30-Dec   35021475  20717908           26 Spider-Man: No Way Home
+## 3 29-Dec   34092399  20327774           26 Spider-Man: No Way Home
+## 4 28-Dec   36104760  21346817           25 Spider-Man: No Way Home
+## 5 27-Dec   39209841  24770593           25 Spider-Man: No Way Home
+## 6 26-Dec   52943454  33283250           27 Spider-Man: No Way Home
+```
+
+]
+
+.panel[.panel-name[**Date Variables**]
+
+- Dealing with date variables used to be much more difficult (prior to `lubridate` package).
+
+   - Dates are still troublesome in most other software
+   
+- Below we create a date variable from the provided character variable, create other variables, examine data and export the dataset.
+
+
+```r
+bom21 &lt;- bom21 |&gt;
+  mutate(date = dmy(paste(date,"-","2021")), # year is required
+                                             #we paste it (add it as text) to each date
+         month = month(date, label=T, abbr=T),
+         day = wday(date, label=T, abbr=T),
+         quart = quarter(date)) |&gt;
+  select(date, month, day, quart, top10gross:num1) |&gt;  # select and reorder variables
+  glimpse() |&gt;                                         # examine data
+  write_csv("Box_Office_Mojo_Week3_HW3.csv")           # export using write_csv
+```
+
+```
+## Rows: 365
+## Columns: 8
+## $ date         &lt;date&gt; 2021-12-31, 2021-12-30, 2021-12-29, 2021-12-28, 2021-12-…
+## $ month        &lt;ord&gt; Dec, Dec, Dec, Dec, Dec, Dec, Dec, Dec, Dec, Dec, Dec, De…
+## $ day          &lt;ord&gt; Fri, Thu, Wed, Tue, Mon, Sun, Sat, Fri, Thu, Wed, Tue, Mo…
+## $ quart        &lt;int&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+## $ top10gross   &lt;dbl&gt; 27601787, 35021475, 34092399, 36104760, 39209841, 5294345…
+## $ num1gross    &lt;dbl&gt; 15407695, 20717908, 20327774, 21346817, 24770593, 3328325…
+## $ num_releases &lt;dbl&gt; 25, 26, 26, 25, 25, 27, 26, 24, 28, 29, 26, 27, 29, 29, 2…
+## $ num1         &lt;chr&gt; "Spider-Man: No Way Home", "Spider-Man: No Way Home", "Sp…
+```
+
+]
+
+]
+
+---
+
+### Importing Clean Data
+
+- `read_csv`  is used in this class 
+
+- External datasets should be saved as `.csv` files to your `code_data_output` folder
+
+  - There are many CSV file options.  
+  
+  -  Select **CSV UTF-8** when saving Excel datasets as `.csv` files.
+
+- `show_col_types=F` suppresses the output message from importing data
+
+  - This option will be required when you create a dashboard.
+  
+
+```r
+mojo_21 &lt;- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |&gt;
+  glimpse(width=60)
+```
+
+```
+## Rows: 365
+## Columns: 8
+## $ date         &lt;date&gt; 2021-12-31, 2021-12-30, 2021-12-29, …
+## $ month        &lt;chr&gt; "Dec", "Dec", "Dec", "Dec", "Dec", "D…
+## $ day          &lt;chr&gt; "Fri", "Thu", "Wed", "Tue", "Mon", "S…
+## $ quart        &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4…
+## $ top10gross   &lt;dbl&gt; 27601787, 35021475, 34092399, 3610476…
+## $ num1gross    &lt;dbl&gt; 15407695, 20717908, 20327774, 2134681…
+## $ num_releases &lt;dbl&gt; 25, 26, 26, 25, 25, 27, 26, 24, 28, 2…
+## $ num1         &lt;chr&gt; "Spider-Man: No Way Home", "Spider-Ma…
+```
+
+
+---
+
+### Week 3 In-class Exercises (TP L5 - Q1)
+
+***TurningPoint Session ID: bua455s22***
+
+Notice that in the prior chunk, we use the command `read_csv`
+
+**True or False:** 
+
+`read_csv` and `read.csv` are the same and can be used interchangeably to import data.
+
+**Hint** Two ways to determine this:
+
+1. R help: In console type ?read_csv and/or type ?read.csv and look through documentation
+
+2. Google **R read_csv and read.csv**
+
+&lt;br&gt;
+
+**Note:** R help files are sometimes hard to decipher and **Googling** often requires time an effort but both are essential to learning to code and manage data independently.
+
+---
+
+.panelset[
+
+.panel[.panel-name[**Categorical Data Management**]
+
+This data set is **ALMOST** ready to work with BUT there are few tasks we will cover:
+
+- select all variables in dataset EXCEPT **`num1`** (name of number 1 movie)
+
+  - We will work with text (character) variables after Quiz 1
+
+- Convert `month` to an ordinal factor, `monthF`
+
+- Convert `day` (of the week) to an ordinal factor, `wkdayF`, with Monday as 1st Day 
+
+   - Change `wkdayF` labels to be `M, T, W, Th, F, Sa, Su`
+
+- Convert quart (Quarter) to an ordinal factor with text labels (HW 3)
+
+&lt;br&gt;
+
+In HW Assignment 3:
+
+- You will create a factor variable **`quartF`** with 
+
+   - levels:  1,2,3,4
+
+   - labels: "1st Qtr", "2nd Qtr", "3rd Qtr", "4th Qtr" 
+   
+- Create a publication quality table showing data by week day and quarter.
+
+]
+
+.panel[.panel-name[**Exclude `num1`**]
+
+Recall that we use `!` to exclude a variable or filter out observations
+
+
+```r
+mojo_21_mod &lt;- mojo_21 |&gt;            # save as new dataset 
+* select(!num1) |&gt;                   # excludes text variable num1
+  glimpse()
+```
+
+```
+## Rows: 365
+## Columns: 7
+## $ date         &lt;date&gt; 2021-12-31, 2021-12-30, 2021-12-29, 2021-12-28, 2021-12-…
+## $ month        &lt;chr&gt; "Dec", "Dec", "Dec", "Dec", "Dec", "Dec", "Dec", "Dec", "…
+## $ day          &lt;chr&gt; "Fri", "Thu", "Wed", "Tue", "Mon", "Sun", "Sat", "Fri", "…
+## $ quart        &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+## $ top10gross   &lt;dbl&gt; 27601787, 35021475, 34092399, 36104760, 39209841, 5294345…
+## $ num1gross    &lt;dbl&gt; 15407695, 20717908, 20327774, 21346817, 24770593, 3328325…
+## $ num_releases &lt;dbl&gt; 25, 26, 26, 25, 25, 27, 26, 24, 28, 29, 26, 27, 29, 29, 2…
+```
+
+
+]
+
+.panel[.panel-name[**Create factor variables**]
+
+The `factor` command is used with `mutate` to create **TWO** factor variables
+- `levels` option specifies **order**
+- `labels` option specifies **appearance of values** 
+
+
+```r
+mojo_21_mod &lt;- mojo_21_mod |&gt; 
+  mutate(monthF = factor(month,     
+                         levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")),
+         wkdayF = factor(day,     
+                         levels=c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+                         labels= c("M", "T", "W", "Th", "F", "Sa", "Su"))) |&gt;
+  glimpse()
+```
+
+```
+## Rows: 365
+## Columns: 9
+## $ date         &lt;date&gt; 2021-12-31, 2021-12-30, 2021-12-29, 2021-12-28, 2021-12-…
+## $ month        &lt;chr&gt; "Dec", "Dec", "Dec", "Dec", "Dec", "Dec", "Dec", "Dec", "…
+## $ day          &lt;chr&gt; "Fri", "Thu", "Wed", "Tue", "Mon", "Sun", "Sat", "Fri", "…
+## $ quart        &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+## $ top10gross   &lt;dbl&gt; 27601787, 35021475, 34092399, 36104760, 39209841, 5294345…
+## $ num1gross    &lt;dbl&gt; 15407695, 20717908, 20327774, 21346817, 24770593, 3328325…
+## $ num_releases &lt;dbl&gt; 25, 26, 26, 25, 25, 27, 26, 24, 28, 29, 26, 27, 29, 29, 2…
+## $ monthF       &lt;fct&gt; Dec, Dec, Dec, Dec, Dec, Dec, Dec, Dec, Dec, Dec, Dec, De…
+## $ wkdayF       &lt;fct&gt; F, Th, W, T, M, Su, Sa, F, Th, W, T, M, Su, Sa, F, Th, W,…
+```
+
+]
+
+.panel[.panel-name[**Examine New Factor Variables**]
+
+We can use `unique` or `summary` to examine the new variables `monthF` and `wkdayF`
+
+- `unique` lists the levels (categories) in the specified order
+
+- `summary` of a factor variable shows the number of observations in level (category)
+
+
+
+```r
+mojo_21_mod |&gt; pull(monthF) |&gt; unique()
+```
+
+```
+##  [1] Dec Nov Oct Sep Aug Jul Jun May Apr Mar Feb Jan
+## Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+```
+
+```r
+mojo_21_mod |&gt; pull(wkdayF) |&gt; unique()
+```
+
+```
+## [1] F  Th W  T  M  Su Sa
+## Levels: M T W Th F Sa Su
+```
+
+```r
+mojo_21_mod |&gt; select(month, monthF, day, wkdayF) |&gt; summary()
+```
+
+```
+##     month               monthF        day            wkdayF 
+##  Length:365         Jan    : 31   Length:365         M :52  
+##  Class :character   Mar    : 31   Class :character   T :52  
+##  Mode  :character   May    : 31   Mode  :character   W :52  
+##                     Jul    : 31                      Th:52  
+##                     Aug    : 31                      F :53  
+##                     Oct    : 31                      Sa:52  
+##                     (Other):179                      Su:52
+```
+
+
+
+]
+
+]
+
+---
+
+.panelset[
+
+.panel[.panel-name[**Numerical Data Management**]
+
+- The `mutate` command can contain many separate statements.
+
+- **Good practice:** Subdivide data management tasks into multiple chunks so that each chunk is easily understood
+
+In the next chunk we will:
+
+- **modify `top10gross` and `num1gross`**
+
+  - We divide these variables by `1000000` and `round` them for presentation purposes
+
+- **create a percent variable** that reflects the percent of top 10 gross that was earned by number 1 film (HW 3)
+
+   - This value will be rounded to 2 decimal places
+
+   - Within `mutate` command (with piping): `pctnum1 = (num1gross/top10gross * 100) |&gt; round(2)`
+     
+- **convert `num_releases` to an integer (HW 3)**
+     
+  - If data are discrete (countable), the data type should be integer
+  
+  - When doing a simple conversion, it is okay to overwrite original variable.
+  
+  - Within `mutate` command: `num_releases = as.integer(num_releases)`
+
+]
+
+.panel[.panel-name[**R code for Numerical Data Management**]
+
+**Note:** Variables are rounded to two decimal values by using piping and `round(2)`
+
+
+```r
+mojo_21_mod &lt;- mojo_21_mod |&gt;
+  mutate(top10grossM = (top10gross/1000000) |&gt; round(2),  # change scale and round
+         
+         num1grossM = (num1gross/1000000) |&gt; round(2),
+         
+         num1pct = (num1gross/top10gross * 100) |&gt; round(2), # create rounded pct var
+         
+         num_releases = as.integer(num_releases)) |&gt; # converts num_releases to integer 
+  
+  select(date, monthF, wkdayF, quart, num_releases, num1gross, num1grossM, 
+         top10gross, top10grossM, num1pct)
+
+head(mojo_21_mod)
+```
+
+```
+## # A tibble: 6 × 10
+##   date       monthF wkdayF quart num_releases num1gross num1grossM top10gross
+##   &lt;date&gt;     &lt;fct&gt;  &lt;fct&gt;  &lt;dbl&gt;        &lt;int&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+## 1 2021-12-31 Dec    F          4           25  15407695       15.4   27601787
+## 2 2021-12-30 Dec    Th         4           26  20717908       20.7   35021475
+## 3 2021-12-29 Dec    W          4           26  20327774       20.3   34092399
+## 4 2021-12-28 Dec    T          4           25  21346817       21.4   36104760
+## 5 2021-12-27 Dec    M          4           25  24770593       24.8   39209841
+## 6 2021-12-26 Dec    Su         4           27  33283250       33.3   52943454
+## # … with 2 more variables: top10grossM &lt;dbl&gt;, num1pct &lt;dbl&gt;
+```
+
+
+]
+
+]
+
+---
+
+
+class: middle
+
+### Week 3 In-class Exercises (TP L5 - Q2)
+
+***TurningPoint Session ID: bua455s22***
+
+**This is BB Question 2 in HW 3**
+
+The correct command used to convert a numeric variable to an integer variable is
+
+`____()`.
+
+When you **`glimpse`** the data after Part 2 (Chunk 3) in HW 3, the type for the **`num_releases`** variable is shown as 
+
+`&lt;____&gt;` instead of ***`&lt;dbl&gt;`***.
+
+
+---
+
+### Summarizing Data
+
+- We will summarize data and then reshape it for a summary table.
+
+  - R commands `group_by` and `summarize` allow us to summarize the data by category
+
+- When summarizing data, it is easier to select the variables you want first.
+
+- Plan what you want to do
+
+
+```r
+mojo_21_smry &lt;- mojo_21_mod |&gt;
+  select(monthF, wkdayF, top10grossM) |&gt;
+  group_by(monthF, wkdayF) |&gt;
+  summarize(avg_top10gross = mean(top10grossM, na.rm=T),
+            mdn_top10gross = median(top10grossM, na.rm=T)) |&gt;
+  glimpse()
+```
+
+```
+## Rows: 84
+## Columns: 4
+## Groups: monthF [12]
+## $ monthF         &lt;fct&gt; Jan, Jan, Jan, Jan, Jan, Jan, Jan, Feb, Feb, Feb, Feb, …
+## $ wkdayF         &lt;fct&gt; M, T, W, Th, F, Sa, Su, M, T, W, Th, F, Sa, Su, M, T, W…
+## $ avg_top10gross &lt;dbl&gt; 0.9250, 0.7425, 0.5225, 0.5800, 3.0780, 4.6380, 2.5760,…
+## $ mdn_top10gross &lt;dbl&gt; 0.690, 0.730, 0.510, 0.550, 2.920, 4.570, 2.700, 0.430,…
+```
+
+
+---
+
+
+### Reshape Data using `pivot_wider`
+
+- A common task in data management is reshaping data
+
+- Dislay data tables must be compact for presentation
+
+
+```r
+mojo_21_wide &lt;- mojo_21_smry |&gt;
+  pivot_wider(id_col=monthF, names_from=wkdayF, values_from=mdn_top10gross) |&gt;
+  rename(Month = monthF)
+head(mojo_21_wide)
+```
+
+```
+## # A tibble: 6 × 8
+## # Groups:   Month [6]
+##   Month     M     T     W    Th     F    Sa    Su
+##   &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Jan    0.69  0.73  0.51  0.55  2.92  4.57  2.7 
+## 2 Feb    0.43  0.54  0.4   0.45  2.23  4.00  3.11
+## 3 Mar    1.15  1.55  1.1   1.13  4.94  7.04  4.70
+## 4 Apr    1.83  2.05  1.72  1.82  7.22 14.1   8.32
+## 5 May    1.57  1.64  1.42  1.19  6.66  7.54  5.1 
+## 6 Jun    4.66  5.43  6.62  4.86 19.7  19.0  13.8
+```
+
+
+---
+
+### Creating Tables for Presentation
+
+Below are two options for for displaying a small dataset in tabular formats.
+
+
+- **Note:** Appearance of default kable tables differs for slides, word documents, and html files
+
+.pull-left[
+
+#### Basic Table with `kable` 
+
+
+```r
+mojo_21_fall_wknd &lt;- mojo_21_wide |&gt;
+  select(Month, F, Sa, Su) |&gt; 
+  filter(Month %in% c("Sep", "Oct", 
+                      "Nov", "Dec"))
+mojo_21_fall_wknd |&gt;
+  kable()
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Month &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sa &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Su &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sep &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.905 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20.605 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.545 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Oct &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38.110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 39.760 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.590 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Nov &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 31.950 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33.515 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.075 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Dec &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 27.600 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38.535 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33.630 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+.pull-right[
+
+#### `kable` Table with styling
+
+
+```r
+mojo_21_fall_wknd |&gt;
+ kable(align="lccc", 
+       caption="Median Fall `21 Top 10 Weekend Gross") |&gt;
+  kable_styling(full_width = F)
+```
+
+&lt;table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+&lt;caption&gt;Median Fall `21 Top 10 Weekend Gross&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Month &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; F &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Sa &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Su &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sep &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 12.905 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 20.605 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 12.545 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Oct &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 38.110 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 39.760 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 24.590 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Nov &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 31.950 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 33.515 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 21.075 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Dec &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 27.600 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 38.535 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 33.630 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+]
+
+---
+
+### Reshaping Data using `pivot_longer`
+
+- The longer data format is often needed for efficient data visualization
+
+.pull-left[
+#### `pivot_longer` R code
+
+```r
+mojo_21_long &lt;- mojo_21_wide |&gt;
+  pivot_longer(cols=M:Su, names_to="Day", 
+               values_to="med_top10gross") 
+head(mojo_21_long, 10)
+```
+
+```
+## # A tibble: 10 × 3
+## # Groups:   Month [2]
+##    Month Day   med_top10gross
+##    &lt;fct&gt; &lt;chr&gt;          &lt;dbl&gt;
+##  1 Jan   M               0.69
+##  2 Jan   T               0.73
+##  3 Jan   W               0.51
+##  4 Jan   Th              0.55
+##  5 Jan   F               2.92
+##  6 Jan   Sa              4.57
+##  7 Jan   Su              2.7 
+##  8 Feb   M               0.43
+##  9 Feb   T               0.54
+## 10 Feb   W               0.4
+```
+
+]
+
+.pull-right[
+#### basic `geom_bar` barplot R code
+
+```r
+(mojo_barplot &lt;- mojo_21_long |&gt; ggplot() + 
+  geom_bar(aes(x=Month, y=med_top10gross, fill=Day), 
+           stat="identity"))
+```
+
+&lt;img src="docs_files/figure-html/basic stacked barplot-1.png" width="360" /&gt;
+
+]
+
+---
+.panelset[
+
+.panel[.panel-name[** Stacked Barplot**]
+
+
+```r
+mojo_21_long &lt;- mojo_21_long |&gt; # Day converted to factor to specify order
+  mutate(Day = factor(Day, levels=c("M", "T", "W", "Th", "F", "Sa", "Su")))
+(mojo_barplot &lt;- mojo_21_long |&gt; 
+  ggplot() + 
+  geom_bar(aes(x=Month, y=med_top10gross, fill=Day), stat="identity") + 
+  theme_classic())
+```
+
+&lt;img src="docs_files/figure-html/stacked barplot no background-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+]
+
+.panel[.panel-name[** Side-by-side Barplot**]
+
+
+```r
+(mojo_barplot &lt;- mojo_21_long |&gt;
+  ggplot() + 
+  geom_bar(aes(x=Month, y=med_top10gross, fill=Day), 
+           stat="identity", position="dodge") + 
+  theme_classic())
+```
+
+&lt;img src="docs_files/figure-html/side by side barplot-1.png" width="864" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+.panel[.panel-name[**Labels Formatted**]
+
+Now we can add on to the plot which is a saved object in the Global Environment
+
+```r
+(mojo_barplot &lt;- mojo_barplot +
+  theme(legend.position ="bottom") +
+  guides(fill = guide_legend(nrow = 1)) +
+  labs(x="", y="Median Daily Gross ($M)",
+       title = "Median Daily Gross of Top 10 Films by Month and Day of Week",
+       caption = "Data Source: www.boxofficemojo.com"))
+```
+
+&lt;img src="docs_files/figure-html/adding label formatting to barplot-1.png" width="864" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+.panel[.panel-name[**Spectral Palette with Text Resized**]
+
+```r
+(mojo_barplot &lt;- mojo_barplot + 
+    scale_fill_brewer(palette = "Spectral") +
+    theme(plot.title = element_text(size = 20),
+        axis.title = element_text(size=18),
+        axis.text = element_text(size=15),
+        plot.caption = element_text(size = 10),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(colour = "darkgrey", fill=NA, size=2)))
+```
+
+&lt;img src="docs_files/figure-html/final plot with spectral palette and text size adjusted-1.png" width="864" style="display: block; margin: auto;" /&gt;
+
+]
+
+]
+
+---
+
+
+class: middle
+
+### Week 3 In-class Exercises (TP L5 - Q3)
+
+***TurningPoint Session ID: bua455s22***
+
+**This is part of BB Question 5 in HW 3**
+
+If you want a grouped barplot with **side-by-side bars**, what is the correct option to include in the **`geom_bar`** statement?
+
+**[Here is some additional information about geom_bar barplots.](https://ggplot2.tidyverse.org/reference/geom_bar.html)** 
+
+---
+
+### `pivot_longer` for Line Plots and Areas Plots
+
+- An alternative to summarizing the data is to show the data as a time series.
+
+  - Two ways to do this are a **line plot** or an **area plot**
+
+  - These plots are an effective data management and presentation tool.
+
+- To make a line plot with multiple variables, we use pivot_longer to reshape the data.
+
+
+```r
+mojo_21_line_area &lt;- mojo_21_mod |&gt;
+  select(date, top10grossM, num1grossM) |&gt;                  # select variables
+  rename(`Top 10` = top10grossM, `No. 1` = num1grossM) |&gt;   # rename for plot
+  pivot_longer(cols=`Top 10`:`No. 1`,                       # reshape data  
+               names_to = "type", values_to = "grossM") |&gt;
+  mutate(type=factor(type, levels=c("Top 10", "No. 1")))    # convert type of gross to a factor
+head(mojo_21_line_area, 4)
+```
+
+```
+## # A tibble: 4 × 3
+##   date       type   grossM
+##   &lt;date&gt;     &lt;fct&gt;   &lt;dbl&gt;
+## 1 2021-12-31 Top 10   27.6
+## 2 2021-12-31 No. 1    15.4
+## 3 2021-12-30 Top 10   35.0
+## 4 2021-12-30 No. 1    20.7
+```
+
+---
+
+.panelset[
+
+.panel[.panel-name[**Line Plot**]
+
+
+```r
+(line_plt &lt;- mojo_21_line_area |&gt;
+  ggplot() + 
+* geom_line(aes(x=date, y=grossM, color=type), size=1) + # two lines created
+  theme_classic())
+```
+
+&lt;img src="docs_files/figure-html/basic line plot code-1.png" width="1008" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+.panel[.panel-name[**Labels &amp; Colors Formatted**]
+
+
+```r
+(line_plt &lt;- line_plt + 
+* theme(legend.position="bottom") +                    # legend at bottom
+* scale_color_manual(values=c("blue", "lightblue")) +  # specify colors
+  labs(x="Date", y = "Gross ($Mill)", color="",
+       title="Top 10 and No. 1 Movie Gross by Date", 
+       subtitle="Jan. 1, 2021 - Dec. 31, 2021",
+       caption="Data Source:www.boxoffice.mojo.com"))
+```
+
+&lt;img src="docs_files/figure-html/line plot with labels formatted-1.png" width="1008" style="display: block; margin: auto;" /&gt;
+
+]
+
+.panel[.panel-name[**Resize Text**]
+
+
+```r
+(line_plt &lt;- line_plt +
+  theme(plot.title = element_text(size = 20),
+        axis.title = element_text(size=18),
+        axis.text = element_text(size=15),
+        plot.caption = element_text(size = 10),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(colour = "darkgrey", fill=NA, size=2)))
+```
+
+&lt;img src="docs_files/figure-html/line plot with text size adjusted-1.png" width="1008" style="display: block; margin: auto;" /&gt;
+
+]
+
+.panel[.panel-name[**Complete Area Plot Code**]
+Change `geom_line` to `geom_area` and `color` to `fill`
+
+
+```r
+area_plt &lt;- mojo_21_line_area |&gt;
+  ggplot() + 
+* geom_area(aes(x=date, y=grossM, fill=type), size=1) + # changed to geom_area and color to fill
+  theme_classic() + 
+  theme(legend.position="bottom") +                    
+* scale_fill_manual(values=c("blue", "lightblue")) +    # changed color to fill
+  labs(x="Date", y = "Gross ($Mill)", color="",
+       title="Top 10 and No. 1 Movie Gross by Date", 
+       subtitle="Jan. 1, 2021 - Dec. 31, 2021",
+       caption="Data Source:www.boxoffice.mojo.com") + 
+    theme(plot.title = element_text(size = 20),
+        axis.title = element_text(size=18),
+        axis.text = element_text(size=15),
+        plot.caption = element_text(size = 10),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(colour = "darkgrey", fill=NA, size=2))
+```
+
+]
+
+.panel[.panel-name[Area Plot]
+
+&lt;img src="docs_files/figure-html/final area plot only-1.png" width="1008" style="display: block; margin: auto;" /&gt;
+
+]
+
+]
+
+---
+
+### Week 3 In-class Exercises (L6 - Q1)
+
+***NOT ON TurningPoint***
+
+**Practice:**
+
+- Running chunks and exporting a table.
+
+- Export the small summary dataset from Lecture.
+- **Preview for 1 Question in Quiz 1 where you will:** 
+  - Select variables from a provided dataset
+  - Group and summarize data
+  - Export a summary table as a .csv file and submit it.
+
+**Instructions:** 
+
+1. Save Week 3 R project to your computer 
+2. Open this project by clicking on .Rproj file
+3. Open .Rmd file within open R project.
+4. Run all chunks above this exercise
+5. Modify the following chunk below to:  
+    i. Round all values in columns 2-4 of `mojo_21_fall_wknd` to 1 decimal place using `round`.  
+    ii. Export `mojo_21_fall_wknd` as a `.csv` file with your name.  
+6. Submit this .csv file with your name in the [Week 3 In-class Exercise on Blackboard](https://blackboard.syracuse.edu/webapps/assignment/uploadAssignment?content_id=_8377476_1&amp;course_id=_475626_1&amp;group_id=&amp;mode=cpview) 
+
+**NOTE: **This counts as part of your in-class particpation for Thu. 9/13/2022.
+
+---
+
+### R Code Chunk for In-class Exercise (L6 - Q1)
+
+0. Optional Remove `, eval=F` from chunk header. This will allow code in chunk to run when it is rendered.
+
+1. Remove the `#` and complete `round` command to round numeric columns (columns 2 - 4) to 1 decimal place.
+
+2. Choose EITHER of the `write_csv` commands and edit it so dataset will be exported to `code_data_output` folder with your name.
+
+3. Delete `write_csv` command you don't edit or put `#` symbols in front of it.
+
+4. Submit `.csv file` with your name
+
+
+
+```r
+# examine data with glimpse
+mojo_21_fall_wknd |&gt; glimpse()
+
+# rounding columns 2, 3 and 4 only
+# mojo_21_fall_wknd[,2:4] &lt;- round()
+  
+# export summary dataset using write_csv without piping
+write_csv(mojo_21_fall_wknd, "Movie_Gross_Fall_2021_Weekends_FirstName_Last_Name.csv")
+
+# export summary dataset using write_csv with piping
+mojo_21_fall_wknd |&gt;
+  write_csv("Movie_Gross_Fall_2021_Weekends_FirstName_Last_Name.csv")
+```
+
+---
+
+class: middle
+
+### Week 3 In-class Exercises (L6 - Q2)
+
+***NOT ON TurningPoint***
+
+If all the columns in a dataset are numeric, you can round the whole dataset at once with the command `round(&lt;name of dataset&gt;)`.
+
+Why wouldn't that work for the dataset in the previous exercise, `mojo_21_fall_wknd`?
+
+&lt;br&gt;
+
+Hint: To answer this question, you are encourage to 
+
+- try running the command `round(mojo_21_fall_wknd)` 
+
+- examine the data using `glimpse` 
+
+---
+
+class: middle
+
+### Week 3 In-class Exercises (TP L6 - Q3)
+
+***TurningPoint Session ID: bua455s22***
+
+Which of the following commands should **NOT** be used within a `mutate` command or a `summarize` command?
+  
+- `as.integer`
+
+- `factor`
+
+- `mean`
+
+- `filter`
+
+---
+
+### HW 3 Introduction
+
+#### Purpose
+
+This assignment will give you experience with:
+
+- Creating an R Project Directory and a code_data_output folder (Review)
+
+- Creating, saving, using an R Markdown file (Review)
+
+- Importing data
+
+- Knitting an R Markdown file to create an word document (Review)
+
+- Creating a README file (Review)
+
+- Using the dplyr commands along with commands to reshape and summarize data
+
+- Creating plots with some formatting
+
+---
+
+class: middle
+
+In HW 3, you will group the data by quarter and week day. This is Part 4 of HW 3 and is very similar to the group_by and summarize code covered in Lecture 5.
+
+### Week 3 In-class Exercises (TP L6 - Q4)
+
+***TurningPoint Session ID: bua455s22***
+
+**This is BB Question 3 in HW 3**
+
+Your grouped and summarized dataset, **`mojo_qtr_smry`**, has
+
+`____` rows and
+
+`____` columns
+
+`____` summary numeric variables
+
+---
+
+
+background-image: url("docs_files/images/tired_panda_faded.png")
+background-size: cover
+
+.pull-left[
+
+### **Key Points from Week 3**
+
+.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph2[
+
+**Summarizing Data by Group**
+
+- Use `group_by` to specify grouping variables
+
+- Followed by `summarize`
+
+   - Within summarize specify type:
+   
+   - .e.g. `mean`, `meadian`, `max`, etc.
+
+**Reshaping Data for Different Purposes**
+
+- `pivot_wider` is useful for display tables
+
+- `pivot_longer` is useful for plots
+
+**Plotting Data**
+
+- grouped barplots (stacked and side-by-side)
+
+- line plots and area plots
+
+]
+
+]
+
+.pull-right[
+
+.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3[
+**You may submit an 'Engagement Question or Comment' about Week 3 lectures until Thursday, 9/15, at midnight on Blackboard.**
+]
+
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%/%total%",
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true,
+"keep_md": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

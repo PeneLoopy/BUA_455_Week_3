@@ -1,0 +1,458 @@
+---
+title: "HW 3 Instructions"
+author: "Penelope Pooler Eisenbies"
+date: "HW 3 is Due 9/21/2022"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+```{r setup, include=F}
+
+# this line specifies options for default options for all R Chunks
+knitr::opts_chunk$set(echo=T, highlight=T)
+
+# suppress scientific notation
+options(scipen=100)
+
+# install helper package (pacman) if needed
+if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
+
+# install and load required packages
+# pacman should be first package in parentheses and then list others
+pacman::p_load(pacman, tidyverse, magrittr, gridExtra, lubridate, 
+               knitr, kableExtra)
+
+# verify packages 
+p_loaded()
+
+```
+
+```{r data cleaning for HW 3, echo=F, include=F, message=FALSE}
+
+bom21 <- read_csv("box_office_mojo_2021.csv", skip=11, show_col_types = FALSE) |>
+  filter(!is.na(Day)) |>
+  select(Date, `Top 10 Gross`, Gross, Releases, `#1 Release`) |>
+  rename(date=Date, top10gross = `Top 10 Gross`, 
+         num_releases=Releases, num1gross=Gross, num1 = `#1 Release`) |>
+  
+  mutate(top10gross = gsub(x=top10gross, pattern="$", replacement="", fixed=T),
+         top10gross = gsub(x=top10gross, pattern=",", replacement="", fixed=T) |> as.numeric(),
+         num1gross = gsub(x=num1gross, pattern="$", replacement="", fixed=T),
+         num1gross = gsub(x=num1gross, pattern=",", replacement="", fixed=T) |> as.numeric()) |>
+  
+  mutate(date = dmy(paste(date,"2021")),
+         month = month(date, label=T, abbr=T),
+         day = wday(date, label=T, abbr=T),
+         quart = quarter(date)) |>
+  select(date, month, day, quart, top10gross:num1) |>  # select and reorder variables
+  glimpse() |>                                         # examine data
+  write_csv("Box_Office_Mojo_Week3_HW3.csv")           # export using write_csv
+
+
+```
+
+
+
+
+## Purpose
+
+This assignment will give you experience with:
+
+- Creating an R Project Directory and a code_data_output folder (Review)
+
+- Creating, saving, using an R Markdown file (Review)
+
+- Importing data
+
+- Knitting an R Markdown file (Review)
+
+- Creating a README file (Review)
+
+- Using the dplyr commands along with commands to reshape and summarize data
+
+- Creating plots with some formatting
+
+
+## Instructions
+
+### HW 3 - First Steps
+
+**`0.`** You are encouraged to work with others and and experiment with sharing code (.Rmd files), but each student should create their own project and .Rmd file to submit.
+
+**`1.`** Create an R project named **`HW 3 <first name> <last name>`**
+   
+**`2.`** Create a folder in your R project labeled **`code_data_output`**.
+
+**`3.`** Download the provided file, **[`HW3_Template.Rmd`](https://blackboard.syracuse.edu/bbcswebdav/pid-8377480-dt-content-rid-95519473_1/xid-95519473_1)** 
+
+**`4.`** Save the downloaded **`HW3_Template.Rmd`** file to your code_data_output folder
+
+- Change file name to be **`HW3_FirstName_LastName.Rmd`**
+
+  - For example, I would change the template file to be named **`HW3_Penelope_Pooler.Rmd`**
+   
+- Change title in the file header to be 'HW 3'
+   
+- Specify yourself as the author
+   
+<br>
+
+**NOTES** 
+
+- Provided header text below shows the correct format.
+
+- This header text also creates a floating Table of Contents (toc).
+   
+```
+---
+title: "HW 2"
+authors: "Penelope Pooler"
+date: "Due 9/21/2022"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+```
+
+**`5.`** Modify the **`setup`** chunk 
+
+- The **`setup`** chunk text shown below has packages and setup options for HW 2.
+
+- Copy and paste text into the setup chunk of your HW 2 Markdown (**`.Rmd`**) file that you created from the provided template.
+   
+<br>
+
+```
+# this line specifies options for default options for all R Chunks
+knitr::opts_chunk$set(echo=T, highlight=T)
+
+# suppress scientific notation
+options(scipen=100)
+
+# install helper package (pacman) if needed
+if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
+
+# install and load required packages
+# pacman should be first package in parentheses and then list others
+pacman::p_load(pacman, tidyverse, magrittr, gridExtra, lubridate, 
+               knitr, kableExtra)
+
+# verify packages 
+p_loaded()
+
+```
+<br>
+
+**`6.`** Click the green triangle or type Ctrl/Cmd + Shift + Enter to run this setup chunk.
+
+---
+
+### HW 3 - Part 1
+
+#### Chunk 2: Import and Modify Categorical Variables
+
+**`0.`** Import `Box_Office_Mojo_Week3_HW3.csv` and save it as `mojo21` using the provided R code in Chunk 2.
+
+**`1.`** Remove **`#`** (comment indicator) from in front of the **`select`** command and use **`!`** to omit the text variable, **`num1`**.
+
+**`2.`** Remove **`#`** (comment indicator) from in front of incomplete code lines in the lower part of this chunk.
+
+**`3.`** Use examples that show how to create a factor variable to complete code with **`mutate`** statement to create factor variable **`quartF`** from **`quart`**: 
+- levels:  c(1,2,3,4)
+- labels: c("1st Qtr", "2nd Qtr", "3rd Qtr", "4th Qtr") 
+
+<br>
+   
+**`4.`** Examine data with **`glimpse`** and answer Blackboard Question:
+
+<br>
+
+##### **BB Question 1**
+
+After completing Part 1, the dataset, mojo_21_mod has
+
+`____` rows and 
+
+`____` columns
+
+that include a date variable and
+
+`____` character <chr> variables,
+
+`____` numeric <dbl> variables, and
+
+`____` factor <fct> variables.
+
+<br>
+   
+---
+
+### HW 3 - Part 2
+
+#### Chunk 3: Modify and Create Numerical Variables
+
+**`1.`** Remove **`#`** (comment indicator) from in front of incomplete code lines in the lower portion of this chunk. 
+
+**`2.`** Use **`mutate`** to do the following:
+
+- Coerce Number of Releases to be an integer variable:
+     - `num_releases = as.integer(num_releases)`
+     
+<br>
+
+- Create `num1_pct = num1gross/top10gross*100` and round to 2 decimal places
+     - see example above
+     
+<br>
+
+**`3.`** Answer Blackboard Question:
+
+
+##### **BB Question 2**
+
+The correct command used to convert a numeric variable to an integer variable is
+
+`_____`.
+
+When you **`glimpse`** the data after completing Part 2 (Chunk 3), the type for the num_releases variable is shown as 
+
+`____` instead of <dbl>.
+
+<br>
+
+---
+
+### HW 3 - Part 3
+
+#### Chunk 4: Group and Summarize Data
+
+**`1.`** Remove **`#`** (comment indicator) from in front of incomplete code lines in this chunk. 
+
+  - **Note:** The first step of selecting the variables for the summary table has been completed for you.
+  
+<br>
+
+**`2.`** Complete the **`group_by`** command to group the data by **`quartF`**, **`wkdayF`**
+
+**`3.`** Complete the **`summarize`** command to create the following summary variables. Recall that **`na.rm=T`** is used remove missing values before calculating summary statistics.
+
+- **`max_num`**, the maximum number of releases (num_releases):
+  - **`max_num = max(num_releases, na.rm=T)`**
+   
+- **`mean_num1grossM`**, mean of the number 1 gross (num1grossM)
+  - **`mean_num1grossM = mean(num1grossM, na.rm=T)`**
+
+<br>
+
+**`4.`** Answer Blackboard Question:
+
+<br>
+
+##### **BB Question 3**
+
+Your grouped and summarized data have
+
+`____` rows and
+
+`____` columns with
+
+`____` summary numeric variables.
+
+<br>
+   
+---
+
+### HW 3 - Part 4
+
+#### Chunk 5: Reshape Data to Create a Table
+
+Use the summary dataset **`mojo_qtr_smry`** you created in Part 3 (Chunk 4)
+
+**`1.`** Remove **`#`** (comment indicator) from in front of incomplete code lines in this chunk. 
+
+**`2.`** Use **`pivot_wider`** to create a wider table with 
+   
+- 1 row for each quarter and 1 column for each weekday
+   
+- to do this specify:
+  - id_col=quartF, names_from=wkdayF, values_from=mean_num1grossM
+
+<br>
+   
+**`3.`** Create a presentation version of your table with **`kable`**
+
+**`4.`** Fill in the blanks in the Blackboard Question:
+
+<br>
+
+##### **BB Question 4**
+
+The mean daily gross ($ millions) for Fridays in each quarter was:
+
+- 1st Qtr: $____ million
+
+- 2nd Qtr: $____ million
+
+- 3rd Qtr: $____ million
+
+- 4th Qtr: $____ million
+
+---
+
+### HW 3 - Part 5
+
+#### Chunk 6: Reshaping and Plotting Data
+
+Use the wide dataset **`mojo_qtr_wide`** you created in Part 4 (Chunk 5)
+
+**`1.`** Remove **`#`** (comment indicator) from in front of incomplete code lines in this chunk. 
+
+**`2.`** Use **`pivot_longer`** to reshape **`mojo_qtr_wide`** to be long again with these specifications:
+
+- **`cols=M:SU, names_to="Day", values_to="mean_num1grossM"`**
+  
+- **`cols=M:SU`** means column labels from M to Su (Monday to Sunday will be 1 column)
+
+- **`names_to="Day"`** means there will be a column named **`Day`** that lists all of the days, M:Su (M, T, W, Th, F, Sa, Su)
+
+- **`values_to="mean_num1grossM"`** means the values will be in one long column named **`mean_num1grossM`**
+
+- **NOTE:** Reshaping the data turned our 'Day' data into a character variable (again).   - I provide the code to make it a factor variable (again).
+
+<br>
+   
+**`3.`** Complete the geom_bar statement to create the bar plot as follows:
+   
+- **`aes(x=Qtr, y=mean_num1grossM, fill=Day)`**
+   
+- outside of aesthetic (aes), after the comma: 
+  - **`stat=identity`**, **`position=dodge`**
+
+<br>
+
+-  **`stat=identity`** tells R to use the data values themselves instead of default (number of observations)
+- **`position=dodge`** indicates side by side bars instead of stacked
+
+<br> 
+   
+4. Answer Blackboard Questions:
+
+<br>
+
+##### **BB Question 5**
+
+For each option include the quotes in your answer.
+
+**`stat=____`** tells R to create the barplot using the numeric values in the data INSTEAD of the number of observations, which is the default.
+
+**`position=____`** indicates that the bars should be side-by-side, instead of stacked which is the default.
+
+<br>
+
+##### **BB Question 6**
+
+Based on the barplot created in Part 5 (Chunk 6), which day of the week has the LOWEST mean daily gross for the top film in all 4 quarters?
+
+<br>
+
+---
+
+### HW 3 - Final Steps
+
+**`1.`** Save your HW 3 R Markdown File (.Rmd) to your code_data_output folder
+
+- Feel free to add addtional notes to yourself above or within each chunk. 
+
+<br>
+
+**`2.`** Knit your R markdown File to create an HTML file (.html).
+
+<br>
+
+**`3.`** Answer all Blackboard questions associated with this assignment.
+
+- You are welcome (encouraged) to work together, each student should submit their own Blackboard assignment.
+
+<br>
+
+**`4.`** Create a README file using the template provided.
+
+- The dataset **Box_Office_Mojo_Week3_HW3.csv** should be 
+- saved in your code_data_output folder listed in your README under **DATA FILES**
+     
+<br>
+
+**`5.`** Zip your entire Project Directory into a compressed File and submit it.
+
+- The zipped R Porject should be named **`HW 3 FirstName LastName`**.
+- The zipped project directory should contain:
+  - The completed README file 
+  - The .Rproj file
+  - The code_data_output folder that contains
+    - completed markdown file (.Rmd)
+    - knitted .html file
+    - .csv data file
+
+<br>
+
+---
+
+## Grading Criteria
+
+**(8 pts.)** Each Blackboard question for HW 3 is worth 1 or 2 points.
+
+<br>
+
+**(2 pts.)** Completing **HW 3 - First Steps** as specified.  
+
+<br>
+  
+**(2 pts.)** Part 1: Full credit for:
+
+- correctly excluding **`num1`** from the dataset
+- correctly creating a factor variable, **`quartF`**
+
+<br>
+    
+**(2 pts.)** Part 2: Full credit for:
+
+- correctly coercing **`num_releases`** to be an integer variable
+- correctly creating the variable **`num1pct`**
+
+<br>
+
+**(2 pts.)** Part 3: Full credit for:
+
+- correctly grouping and summarizing the data to create to summary variables:
+- **`max_num`** and **`mean_num1grossM`** 
+
+<br>
+
+**(2 pts.)** Part 4: Full credit for:
+
+- correctly using **`pivot_wider`** to reshape the data to wide format
+- creating a basic presentation table using **`kable`**
+
+<br>
+
+**(2 pts.)** Part 5: Full credit for:
+
+- correctly using **`pivot_longer`** to reshape the data to long format
+- completing the barplot code to create a barplot
+
+<br>
+
+**(3 pts.)** Completing the **HW 3 - Final Steps** and correctly submitting your zipped project directory:
+
+- 1 point for creating a correct README file
+- 1 point for having the .Rmd, .html, and .csv files in your code_data_output folder
+- 1 point for zipping and submitting your project correctly
+
+
+

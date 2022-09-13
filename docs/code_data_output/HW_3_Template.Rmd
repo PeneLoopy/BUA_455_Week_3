@@ -1,0 +1,186 @@
+---
+title: "HW 3 Template"
+author: "Fill Name in"
+date: "Due 9/21/2022"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+
+### HW 3 - Part 1
+
+#### Chunk 2: Import and Modify Categorical Variables
+
+```{r import and modify categorical variables}
+
+
+# to suppress message about import include show_col_types=F
+mojo_21 <- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |>
+  glimpse()
+
+
+# use select with ! to exclude (drop) num1 text variable
+mojo_21_mod <- mojo_21 |>
+#  select() 
+
+# create factor variables monthF and wkdayF
+# levels option specifies order (default is alphabetical)
+# labels option specifies appearance of values in data, tables and plots
+mojo_21_mod <- mojo_21_mod |>
+  mutate(monthF = factor(month,
+                         levels=c("Jan", "Feb", "Mar", "Apr", 
+                                  "May", "Jun", "Jul", "Aug", 
+                                  "Sep", "Oct", "Nov", "Dec")),
+           
+         wkdayF = factor(day, 
+                         levels=c("Mon", "Tue", "Wed", "Thu", 
+                                  "Fri", "Sat", "Sun"),
+                         labels= c("M", "T", "W", "Th", 
+                                   "F", "Sa", "Su"))) |>
+  glimpse()
+
+# use examples above create factor variable quartF
+# remove # from the three lines below this one once R code is complete
+
+# mojo_21_mod <- mojo_21_mod |>
+#   mutate(quartF = factor()) |>
+#   glimpse()
+
+
+```
+
+---
+
+### HW 3 - Part 2
+
+#### Chunk 3: Modify and Create Numerical Variables
+
+```{r modify and create numerical variables}
+
+# provided code has divided top10gross and num1gross by 1 million
+# values are rounded to 2 decimal place 
+
+mojo_21_mod <- mojo_21_mod |>
+  mutate(top10grossM = (top10gross/1000000) |> round(2),  # change scale and round
+          num1grossM = (num1gross/1000000) |> round(2)) |>
+  glimpse()
+  
+
+# use as.integer to convert number of releases to an integer variable
+# calculate num1_pct = num1gross/top10gross * 100
+# round num1_pct to two decimal places
+
+# mojo_21_mod <- mojo_21_mod |>
+#   mutate(num_releases = ,
+#          num1_pct = ) |>
+#   glimpse()
+
+```
+
+---
+
+### HW 3 - Part 3
+
+#### Chunk 4: Group and Summarize Data
+
+```{r group and summarize Data}
+
+# group data by quartF and wkdayF and calculate the following summary statistics for each weekday in each quarter:
+#   max_num, the maximum number of releases (num_releases)
+#   mean_num1grossM, mean of the number 1 gross (num1grossM)
+
+# mojo_qtr_smry <- mojo_21_mod |>
+#   select(quartF, wkdayF, num_releases, num1grossM) |>
+#   group_by() |>
+#   summarize(max_num = ,
+#             mean_num1grossM = )
+
+```
+
+---
+
+### HW 3 - Part 4
+
+#### Chunk 5: Reshape Data to Create a Table
+
+```{r reshape data to create a table}
+
+# reshape the data mojo_qtr_smry to a wide format to create a summary table
+# the table will have 
+# 1 column showing the 4 quarters 
+# 1 column for each day of the week
+# 4 rows, 1 for each quarter of the year
+
+# mojo_qtr_wide <- mojo_qtr_smry |>
+#   pivot_wider() |>
+#   rename(Qtr = quartF) 
+
+
+# use kable to present summary table mojo_qtr_wide
+# more complete table formatting in Week 3 lecture notes
+
+# mojo_qtr_wide |>
+#   kable()
+
+
+```
+
+---
+
+### HW 3 - Part 5
+
+#### Chunk 6: Reshaping and Plotting Data
+
+```{r reshaping and plotting data}
+
+# reshape data to long format for plot
+# the long form of the data will have 
+#  1 column for days of the week
+#  1 column for the mean values
+
+# mojo_qtr_long <- mojo_qtr_wide |>
+#   pivot_longer() |>
+#   glimpse()
+
+
+# Day variable is converted to a factor to specify order (levels)
+# this code is complete but will only run once code above is completed
+
+# mojo_qtr_long <- mojo_qtr_long|>
+#   mutate(Day=factor(Day, levels=c("M","T", "W", "Th", "F", "Sa", "Su"))) |>
+#   glimpse()
+
+
+# basic barplot code
+# aesthetic for barplot: aes(x=Qtr, y=mean_num1grossM, fill=Day)
+# in geom_bar, after comma include these options: 
+# stat=identity, position=dodge
+
+# (mojo_qtr_barplot <- mojo_qtr_long |>
+#   ggplot() +
+#   geom_bar(aes(), ) + 
+#   theme_classic())
+
+
+# additional code to format barplot
+# this code is complete but will only run once code above is completed
+
+# (mojo_qtr_barplot + 
+#    theme(legend.position ="bottom") +
+#    guides(fill = guide_legend(nrow = 1)) +
+#    labs(x="", y="Mean Daily Gross ($M)", 
+#         title = "Mean Daily Gross of Top Film by Quarter and Day of Week",
+#         caption = "Data Source: www.boxofficemojo.com") +
+#    scale_fill_brewer(palette = "Spectral"))
+       
+
+```
+
