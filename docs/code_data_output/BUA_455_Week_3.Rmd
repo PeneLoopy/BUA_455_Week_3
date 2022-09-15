@@ -53,7 +53,7 @@ Recommended Textbook: A [list of useful sections can be found here](https://docs
   
 ##### `ggplot` introduction:
 
-- basic syntax and aesethetics statements (`aes`)
+- basic syntax and aesthetics statements (`aes`)
 - creating a basic boxplot (`geom_boxplot`) or scatterplot (`geom_point`)
 - removing default background by modifying the theme
 - adding a a third categorical variable to color the data by category
@@ -638,7 +638,6 @@ Change `geom_line` to `geom_area` and `color` to `fill`
 
 - Running chunks and exporting a table.
 
-- Export the small summary dataset from Lecture.
 - **Preview for 1 Question in Quiz 1 where you will:** 
   - Select variables from a provided dataset
   - Group and summarize data
@@ -655,7 +654,7 @@ Change `geom_line` to `geom_area` and `color` to `fill`
     ii. Export `mojo_21_fall_wknd` as a `.csv` file with your name.  
 6. Submit this .csv file with your name in the [Week 3 In-class Exercise on Blackboard](https://blackboard.syracuse.edu/webapps/blackboard/content/listContentEditable.jsp?content_id=_8223268_1&course_id=_475626_1&mode=reset) 
 
-**NOTE: **This counts as part of your in-class participation for the Week 3 lectures.
+**NOTE:** This counts as part of your in-class participation for the Week 3 lectures and due by Friday at midnight.
 
 ---
 
