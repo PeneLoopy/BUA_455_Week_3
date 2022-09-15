@@ -817,7 +817,6 @@ area_plt
 
 - Running chunks and exporting a table.
 
-- Export the small summary dataset from Lecture.
 - **Preview for 1 Question in Quiz 1 where you will:** 
   - Select variables from a provided dataset
   - Group and summarize data
@@ -832,9 +831,9 @@ area_plt
 5. Modify the following chunk below to:  
     i. Round all values in columns 2-4 of `mojo_21_fall_wknd` to 1 decimal place using `round`.  
     ii. Export `mojo_21_fall_wknd` as a `.csv` file with your name.  
-6. Submit this .csv file with your name in the [Week 3 In-class Exercise on Blackboard](https://blackboard.syracuse.edu/webapps/assignment/uploadAssignment?content_id=_8377476_1&course_id=_475626_1&group_id=&mode=cpview) 
+6. Submit this .csv file with your name in the [Week 3 In-class Exercise on Blackboard](https://blackboard.syracuse.edu/webapps/blackboard/content/listContentEditable.jsp?content_id=_8223268_1&course_id=_475626_1&mode=reset) 
 
-**NOTE: **This counts as part of your in-class particpation for Thu. 9/13/2022.
+**NOTE: **This counts as part of your in-class particpation for Thursday 9/15/2022.
 
 ---
 

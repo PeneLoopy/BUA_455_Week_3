@@ -1526,8 +1526,8 @@ div.tocify {
 <li><p>Importing data</p></li>
 <li><p>Knitting an R Markdown file (Review)</p></li>
 <li><p>Creating a README file (Review)</p></li>
-<li><p>Using the dplyr commands along with commands to reshape and
-summarize data</p></li>
+<li><p>Using the <strong><code>dplyr</code></strong> commands along with
+commands to reshape and summarize data</p></li>
 <li><p>Creating plots with some formatting</p></li>
 </ul>
 </div>
@@ -1565,7 +1565,7 @@ code_data_output folder</p>
 (toc).</p></li>
 </ul>
 <pre><code>---
-title: &quot;HW 2&quot;
+title: &quot;HW 3&quot;
 authors: &quot;Penelope Pooler&quot;
 date: &quot;Due 9/21/2022&quot;
 output: 
@@ -1579,8 +1579,8 @@ output:
 <strong><code>setup</code></strong> chunk</p>
 <ul>
 <li><p>The <strong><code>setup</code></strong> chunk text shown below
-has packages and setup options for HW 2.</p></li>
-<li><p>Copy and paste text into the setup chunk of your HW 2 Markdown
+has packages and setup options for HW 3.</p></li>
+<li><p>Copy and paste text into the setup chunk of your HW 3 Markdown
 (<strong><code>.Rmd</code></strong>) file that you created from the
 provided template.</p></li>
 </ul>
@@ -1626,8 +1626,8 @@ incomplete code lines in the lower part of this chunk.</p>
 a factor variable to complete code with
 <strong><code>mutate</code></strong> statement to create factor variable
 <strong><code>quartF</code></strong> from
-<strong><code>quart</code></strong>: - levels: c(1,2,3,4) - labels:
-c(“1st Qtr”, “2nd Qtr”, “3rd Qtr”, “4th Qtr”)</p>
+<strong><code>quart</code></strong>: - levels: <code>c(1,2,3,4)</code> -
+labels: <code>c(&quot;1st Qtr&quot;, &quot;2nd Qtr&quot;, &quot;3rd Qtr&quot;, &quot;4th Qtr&quot;)</code></p>
 <p><br></p>
 <p><strong><code>4.</code></strong> Examine data with
 <strong><code>glimpse</code></strong> and answer Blackboard
@@ -1680,7 +1680,7 @@ variable is</p>
 <p>When you <strong><code>glimpse</code></strong> the data after
 completing Part 2 (Chunk 3), the type for the num_releases variable is
 shown as</p>
-<p><code>____</code> instead of <dbl>.</p>
+<p><code>____</code> instead of <code>&lt;dbl&gt;</code>.</p>
 <p><br></p>
 <hr />
 </div>
@@ -1748,7 +1748,7 @@ with</p>
 <li><p>1 row for each quarter and 1 column for each weekday</p></li>
 <li><p>to do this specify:</p>
 <ul>
-<li>id_col=quartF, names_from=wkdayF, values_from=mean_num1grossM</li>
+<li><strong><code>id_col=quartF, names_from=wkdayF, values_from=mean_num1grossM</code></strong></li>
 </ul></li>
 </ul>
 <p><br></p>
@@ -1785,8 +1785,8 @@ incomplete code lines in this chunk.</p>
 <strong><code>mojo_qtr_wide</code></strong> to be long again with these
 specifications:</p>
 <ul>
-<li><p><strong><code>cols=M:SU, names_to=&quot;Day&quot;, values_to=&quot;mean_num1grossM&quot;</code></strong></p></li>
-<li><p><strong><code>cols=M:SU</code></strong> means column labels from
+<li><p><strong><code>cols=M:Su, names_to=&quot;Day&quot;, values_to=&quot;mean_num1grossM&quot;</code></strong></p></li>
+<li><p><strong><code>cols=M:Su</code></strong> means column labels from
 M to Su (Monday to Sunday will be 1 column)</p></li>
 <li><p><strong><code>names_to=&quot;Day&quot;</code></strong> means there will be
 a column named <strong><code>Day</code></strong> that lists all of the
@@ -1805,16 +1805,16 @@ create the bar plot as follows:</p>
 <li><p><strong><code>aes(x=Qtr, y=mean_num1grossM, fill=Day)</code></strong></p></li>
 <li><p>outside of aesthetic (aes), after the comma:</p>
 <ul>
-<li><strong><code>stat=identity</code></strong>,
-<strong><code>position=dodge</code></strong></li>
+<li><strong><code>stat=&quot;identity&quot;</code></strong>,
+<strong><code>position=&quot;dodge&quot;</code></strong></li>
 </ul></li>
 </ul>
 <p><br></p>
 <ul>
-<li><strong><code>stat=identity</code></strong> tells R to use the data
-values themselves instead of default (number of observations)</li>
-<li><strong><code>position=dodge</code></strong> indicates side by side
-bars instead of stacked</li>
+<li><strong><code>stat=&quot;identity&quot;</code></strong> tells R to use the
+data values themselves instead of default (number of observations)</li>
+<li><strong><code>position=&quot;dodge&quot;</code></strong> indicates side by
+side bars instead of stacked</li>
 </ul>
 <p><br></p>
 <ol start="4" style="list-style-type: decimal">

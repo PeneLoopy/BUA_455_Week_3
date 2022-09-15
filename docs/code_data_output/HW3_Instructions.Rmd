@@ -71,7 +71,7 @@ This assignment will give you experience with:
 
 - Creating a README file (Review)
 
-- Using the dplyr commands along with commands to reshape and summarize data
+- Using the **`dplyr`** commands along with commands to reshape and summarize data
 
 - Creating plots with some formatting
 
@@ -108,7 +108,7 @@ This assignment will give you experience with:
    
 ```
 ---
-title: "HW 2"
+title: "HW 3"
 authors: "Penelope Pooler"
 date: "Due 9/21/2022"
 output: 
@@ -122,9 +122,9 @@ output:
 
 **`5.`** Modify the **`setup`** chunk 
 
-- The **`setup`** chunk text shown below has packages and setup options for HW 2.
+- The **`setup`** chunk text shown below has packages and setup options for HW 3.
 
-- Copy and paste text into the setup chunk of your HW 2 Markdown (**`.Rmd`**) file that you created from the provided template.
+- Copy and paste text into the setup chunk of your HW 3 Markdown (**`.Rmd`**) file that you created from the provided template.
    
 <br>
 
@@ -164,8 +164,8 @@ p_loaded()
 **`2.`** Remove **`#`** (comment indicator) from in front of incomplete code lines in the lower part of this chunk.
 
 **`3.`** Use examples that show how to create a factor variable to complete code with **`mutate`** statement to create factor variable **`quartF`** from **`quart`**: 
-- levels:  c(1,2,3,4)
-- labels: c("1st Qtr", "2nd Qtr", "3rd Qtr", "4th Qtr") 
+- levels: `c(1,2,3,4)`
+- labels: `c("1st Qtr", "2nd Qtr", "3rd Qtr", "4th Qtr")` 
 
 <br>
    
@@ -222,7 +222,7 @@ The correct command used to convert a numeric variable to an integer variable is
 
 When you **`glimpse`** the data after completing Part 2 (Chunk 3), the type for the num_releases variable is shown as 
 
-`____` instead of <dbl>.
+`____` instead of `<dbl>`.
 
 <br>
 
@@ -281,7 +281,7 @@ Use the summary dataset **`mojo_qtr_smry`** you created in Part 3 (Chunk 4)
 - 1 row for each quarter and 1 column for each weekday
    
 - to do this specify:
-  - id_col=quartF, names_from=wkdayF, values_from=mean_num1grossM
+  - **`id_col=quartF, names_from=wkdayF, values_from=mean_num1grossM`**
 
 <br>
    
@@ -315,9 +315,9 @@ Use the wide dataset **`mojo_qtr_wide`** you created in Part 4 (Chunk 5)
 
 **`2.`** Use **`pivot_longer`** to reshape **`mojo_qtr_wide`** to be long again with these specifications:
 
-- **`cols=M:SU, names_to="Day", values_to="mean_num1grossM"`**
+- **`cols=M:Su, names_to="Day", values_to="mean_num1grossM"`**
   
-- **`cols=M:SU`** means column labels from M to Su (Monday to Sunday will be 1 column)
+- **`cols=M:Su`** means column labels from M to Su (Monday to Sunday will be 1 column)
 
 - **`names_to="Day"`** means there will be a column named **`Day`** that lists all of the days, M:Su (M, T, W, Th, F, Sa, Su)
 
@@ -332,12 +332,12 @@ Use the wide dataset **`mojo_qtr_wide`** you created in Part 4 (Chunk 5)
 - **`aes(x=Qtr, y=mean_num1grossM, fill=Day)`**
    
 - outside of aesthetic (aes), after the comma: 
-  - **`stat=identity`**, **`position=dodge`**
+  - **`stat="identity"`**, **`position="dodge"`**
 
 <br>
 
--  **`stat=identity`** tells R to use the data values themselves instead of default (number of observations)
-- **`position=dodge`** indicates side by side bars instead of stacked
+-  **`stat="identity"`** tells R to use the data values themselves instead of default (number of observations)
+- **`position="dodge"`** indicates side by side bars instead of stacked
 
 <br> 
    
