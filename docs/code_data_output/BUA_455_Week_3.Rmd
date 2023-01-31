@@ -10,7 +10,7 @@ output:
     toc_float: yes
 ---
 
-
+ 
 ```{r setup, include=TRUE}
 
 # this line specifies options for default options for all R Chunks
@@ -25,8 +25,7 @@ if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.
 
 # install and load required packages
 # pacman should be first package in parentheses and then list others
-pacman::p_load(pacman, tidyverse, gridExtra, magrittr, lubridate, 
-               knitr, kableExtra)
+pacman::p_load(pacman, tidyverse, gridExtra, magrittr, lubridate, kableExtra)
 
 # verify packages (comment out in finished documents)
 p_loaded()
@@ -35,11 +34,29 @@ p_loaded()
 
 ---
 
+
 ### Reminders:
 
-#### HW 2 is Due 9/14
 
-Recommended Textbook: A [list of useful sections can be found here](https://docs.Google.com/spreadsheets/d/1yhUSJAJQ4VVjVBpiv3_C2D3tQs2SmJjynSq9chqXOwc/edit?usp=sharing) and will be updated as the course progresses.
+#### HW 2 is Due 2/1
+
+<br>
+
+
+Textbook: A [list of useful sections can be found here](https://docs.Google.com/spreadsheets/d/1yhUSJAJQ4VVjVBpiv3_C2D3tQs2SmJjynSq9chqXOwc/edit?usp=sharing) and will be updated as the course progresses.
+
+<br>
+
+**Syracuse University Business, Data & Technology Career Fair**
+
+- Wednesday, February 1, 2023 	3:00pm - 7:00pm
+- Schine Student Center, Goldstein Auditorium
+- Open to all students! More details are on Handshake.
+
+
+
+
+---
 
 
 #### Reminders from Week 2 and HW 2:
@@ -58,6 +75,35 @@ Recommended Textbook: A [list of useful sections can be found here](https://docs
 - removing default background by modifying the theme
 - adding a a third categorical variable to color the data by category
   
+---
+
+### Answer to Question about Reordering variables
+
+The R command **[relocate](https://dplyr.tidyverse.org/reference/relocate.html)** in the `dplyr` package can be used to reorder variables by type
+
+
+```{r starwars numeric vars first}
+
+my_starwars <- starwars |>
+  select(1:11) |>
+  relocate(where(is.numeric)) |> 
+  glimpse(width=40)
+
+```
+
+
+<br>
+
+```{r starwars character vars first}
+
+my_starwars <- starwars |>
+  select(1:11) |>
+  relocate(where(is.character)) |> 
+  glimpse(width=40)
+
+```
+
+
 ---
 
 ### New Skills in Week 3 (and HW 3)
@@ -93,11 +139,11 @@ Online Data are often formatted for viewing, not using.
 
 .center[
 
-![Box Office Mojo daily data from 2021](bom21_screenshot.png)
+![Box Office Mojo daily data from 2022](bom22_screenshot.png)
 
 
 
-[Data Source: Box Office Mojo](https://www.boxofficemojo.com/daily/2021/?view=year)
+[Data Source: Box Office Mojo](https://www.boxofficemojo.com/daily/2022/?view=year)
 
 ---
 
@@ -105,7 +151,7 @@ Online Data are often formatted for viewing, not using.
 
 Copying data from a website and saving them as a .csv file (CSV UTF-8) removes most of the formatting, but data cleaning is still required.
 
-![Box Office Mojo daily data from 2021 saved as .csv file](bom21_rawdata_screenshot.png){height=65%}
+![Box Office Mojo daily data from 2022 saved as .csv file](bom22_rawdata_screenshot.png){height=65%}
 
 ---
 
@@ -123,12 +169,12 @@ Copying data from a website and saving them as a .csv file (CSV UTF-8) removes m
 
 ```{r}
 
-bom21 <- read_csv("box_office_mojo_2021.csv", skip=11, show_col_types = FALSE) |>
+bom22 <- read_csv("box_office_mojo_2022.csv", skip=11, show_col_types = FALSE) |>
   filter(!is.na(Day)) |>
   select(Date, `Top 10 Gross`, Gross, Releases, `#1 Release`) |>
   rename(date=Date, top10gross = `Top 10 Gross`, 
          num_releases=Releases, num1gross=Gross, num1 = `#1 Release`) 
-head(bom21)
+head(bom22)
 
 ```
 
@@ -141,7 +187,7 @@ head(bom21)
 - Each variable was then converted to numeric with `as.numeric`.
 
 ```{r clean numeric variables}
-bom21 <- bom21 |>
+bom22 <- bom22 |>
   mutate(top10gross = gsub(x=top10gross, pattern="$", replacement="", fixed=T),
          top10gross = gsub(x=top10gross, pattern=",", replacement="", fixed=T) |> 
            as.numeric(),
@@ -149,27 +195,29 @@ bom21 <- bom21 |>
          num1gross = gsub(x=num1gross, pattern="$", replacement="", fixed=T),
          num1gross = gsub(x=num1gross, pattern=",", replacement="", fixed=T) |> 
            as.numeric())
-head(bom21)
+head(bom22)
 ```
 
 ---
+
 ### Date Variables
 
 - Dealing with date variables used to be much more difficult (prior to `lubridate` package).
 
-   - Dates are still troublesome in most other software
-   
+- Dates are still troublesome in most other software
+
 - Below we create a date variable from the provided character variable, create other variables, examine data and export the dataset.
 
 ```{r date variables modified with lubridate}
-bom21 <- bom21 |>
-  mutate(date = dmy(paste(date,"-","2021")), # year is required so we paste it (add it as text) to each date
+bom22 <- bom22 |>
+  mutate(date = dmy(paste(date,"-","2022")), # year is required so we paste it (add it as text) to each date
          month = month(date, label=T, abbr=T),
          day = wday(date, label=T, abbr=T),
          quart = quarter(date)) |>
   select(date, month, day, quart, top10gross:num1) |>  # select and reorder variables
   glimpse() |>                                         # examine data
   write_csv("Box_Office_Mojo_Week3_HW3.csv")           # export using write_csv
+
 ```
 
 ---
@@ -189,7 +237,7 @@ bom21 <- bom21 |>
   - This option will be required when you create a dashboard.
   
 ```{r import and examine cleaned data}
-mojo_21 <- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |>
+mojo_22 <- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |>
   glimpse(width=60)
 
 ```
@@ -197,9 +245,9 @@ mojo_21 <- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |>
 
 ---
 
-### Week 3 In-class Exercises (TP L5 - Q1)
+### Week 3 In-class Exercises (L5 - Q1)
 
-***TurningPoint Session ID: bua455s22***
+***Session ID: bua455s23***
 
 Notice that in the prior chunk, we use the command `read_csv`
 
@@ -215,7 +263,7 @@ Notice that in the prior chunk, we use the command `read_csv`
 
 <br>
 
-**Note:** R help files are sometimes hard to decipher and **Googling** often requires time an effort but both are essential to learning to code and manage data independently.
+**Note:** R help files are sometimes hard to decipher and **Googling** often requires time and effort but both are essential to learning to code and manage data independently.
 
 ---
 
@@ -255,7 +303,7 @@ Recall that we use `!` to exclude a variable or filter out observations
 
 ```{r excluding a variable}
 
-mojo_21_mod <- mojo_21 |>            # save as new dataset 
+mojo_22_mod <- mojo_22 |>            # save as new dataset 
   select(!num1) |>                   # excludes text variable num1 #<<
   glimpse()
 
@@ -271,7 +319,7 @@ The `factor` command is used with `mutate` to create **TWO** factor variables
 - `labels` option specifies **appearance of values** 
 
 ```{r creating factor variables}
-mojo_21_mod <- mojo_21_mod |> 
+mojo_22_mod <- mojo_22_mod |> 
   mutate(monthF = factor(month,     
                          levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")),
@@ -297,9 +345,9 @@ We can use `unique` or `summary` to examine the new variables `monthF` and `wkda
 
 ```{r examine factor variables unique and summary}
 
-mojo_21_mod |> pull(monthF) |> unique()
-mojo_21_mod |> pull(wkdayF) |> unique()
-mojo_21_mod |> select(month, monthF, day, wkdayF) |> summary()
+mojo_22_mod |> pull(monthF) |> unique()
+mojo_22_mod |> pull(wkdayF) |> unique()
+mojo_22_mod |> select(month, monthF, day, wkdayF) |> summary()
 
 ```
 
@@ -338,7 +386,7 @@ In the next chunk we will:
 **Note:** Variables are rounded to two decimal values by using piping and `round(2)`
 
 ```{r numerical data management}
-mojo_21_mod <- mojo_21_mod |>
+mojo_22_mod <- mojo_22_mod |>
   mutate(top10grossM = (top10gross/1000000) |> round(2),  # change scale and round
          
          num1grossM = (num1gross/1000000) |> round(2),
@@ -350,16 +398,16 @@ mojo_21_mod <- mojo_21_mod |>
   select(date, monthF, wkdayF, quart, num_releases, num1gross, num1grossM, 
          top10gross, top10grossM, num1pct)
 
-head(mojo_21_mod)
+head(mojo_22_mod)
 ```
 
 ---
 
 class: middle
 
-### Week 3 In-class Exercises (TP L5 - Q2)
+### Week 3 In-class Exercises (L5 - Q2)
 
-***TurningPoint Session ID: bua455s22***
+***Session ID: bua455s23***
 
 **This is BB Question 2 in HW 3**
 
@@ -374,7 +422,32 @@ When you **`glimpse`** the data after Part 2 (Chunk 3) in HW 3, the type for the
 
 ---
 
-### Summarizing Data
+### Grouping and Filtering Data
+
+- In addition to filtering the whole dataset by value, we can also filter data by value within each group
+
+  - R command `group_by` allows us to group data before we filter.
+  
+  - Data are filtered by value **WITHIN** each specified group
+  
+  - Ungrouping the data afterwards using `ungroup` is not required, but is helpful
+
+- The example below is not used in the subsequent summary but can be very useful.
+
+```{r filter and summarize}
+
+mojo_22_mnth_end <- mojo_22_mod |>
+  select(date, monthF, top10grossM) |>
+  group_by(monthF) |>                                       # doesn't change data appearance
+  filter(date == max(date)) |>
+  ungroup() |>                                              # ungroup not required but helpful
+  glimpse()
+
+```
+
+---
+
+### Grouping and Summarizing Data
 
 - We will summarize data and then reshape it for a summary table.
 
@@ -386,15 +459,15 @@ When you **`glimpse`** the data after Part 2 (Chunk 3) in HW 3, the type for the
 
 ```{r group and summarize}
 
-mojo_21_smry <- mojo_21_mod |>
+mojo_22_smry <- mojo_22_mod |>
   select(monthF, wkdayF, top10grossM) |>
-  group_by(monthF, wkdayF) |>
+  group_by(monthF, wkdayF) |>                              # doesn't change data appearance
   summarize(avg_top10gross = mean(top10grossM, na.rm=T),
-            mdn_top10gross = median(top10grossM, na.rm=T)) |>
-  glimpse()
+            mdn_top10gross = median(top10grossM, na.rm=T),
+            max_top10gross = max(top10grossM, na.rm=T)) |>
+  ungroup() |> glimpse()                                   # ungroup not required but helpful
 
 ```
-
 
 ---
 
@@ -406,10 +479,10 @@ mojo_21_smry <- mojo_21_mod |>
 - Dislay data tables must be compact for presentation
 
 ```{r reshape data using pivot_wider}
-mojo_21_wide <- mojo_21_smry |>
-  pivot_wider(id_col=monthF, names_from=wkdayF, values_from=mdn_top10gross) |>
+mojo_22_wide <- mojo_22_smry |>
+  pivot_wider(id_cols=monthF, names_from=wkdayF, values_from=max_top10gross) |>
   rename(Month = monthF)
-head(mojo_21_wide)
+head(mojo_22_wide)
 ```
 
 
@@ -426,11 +499,11 @@ Below are two options for for displaying a small dataset in tabular formats.
 
 ```{r filter select and present data}
 
-mojo_21_fall_wknd <- mojo_21_wide |>
+mojo_22_fall_wknd <- mojo_22_wide |>
   select(Month, F, Sa, Su) |> 
   filter(Month %in% c("Sep", "Oct", 
                       "Nov", "Dec"))
-mojo_21_fall_wknd |>
+mojo_22_fall_wknd |>
   kable()
 ```
 
@@ -438,9 +511,9 @@ mojo_21_fall_wknd |>
 #### `kable` Table with styling
 
 ```{r modifying table alignment and styling}
-mojo_21_fall_wknd |>
+mojo_22_fall_wknd |>
  kable(align="lccc", 
-       caption="Median Fall `21 Top 10 Weekend Gross") |>
+       caption="Maximum Fall `22 Top 10 Weekend Gross") |>
   kable_styling(full_width = F)
 
 ```
@@ -456,18 +529,18 @@ mojo_21_fall_wknd |>
 #### `pivot_longer` R code
 
 ```{r pivot longer R code}
-mojo_21_long <- mojo_21_wide |>
+mojo_22_long <- mojo_22_wide |>
   pivot_longer(cols=M:Su, names_to="Day", 
-               values_to="med_top10gross") 
-head(mojo_21_long, 10)
+               values_to="max_top10gross") 
+head(mojo_22_long, 10)
 ```
 
 
 #### basic `geom_bar` barplot R code
 
 ```{r basic stacked barplot, fig.dim=c(5,4)}
-(mojo_barplot <- mojo_21_long |> ggplot() + 
-  geom_bar(aes(x=Month, y=med_top10gross, fill=Day), 
+(mojo_barplot <- mojo_22_long |> ggplot() + 
+  geom_bar(aes(x=Month, y=max_top10gross, fill=Day), 
            stat="identity"))
 ```
 
@@ -476,11 +549,11 @@ head(mojo_21_long, 10)
 ### Stacked Barplot
 
 ```{r stacked barplot no background, fig.dim=c(8,5), fig.align='center'}
-mojo_21_long <- mojo_21_long |> # Day converted to factor to specify order
+mojo_22_long <- mojo_22_long |> # Day converted to factor to specify order
   mutate(Day = factor(Day, levels=c("M", "T", "W", "Th", "F", "Sa", "Su")))
-(mojo_barplot <- mojo_21_long |> 
+(mojo_barplot <- mojo_22_long |> 
   ggplot() + 
-  geom_bar(aes(x=Month, y=med_top10gross, fill=Day), stat="identity") + 
+  geom_bar(aes(x=Month, y=max_top10gross, fill=Day), stat="identity") + 
   theme_classic())
 ```
 
@@ -489,9 +562,9 @@ mojo_21_long <- mojo_21_long |> # Day converted to factor to specify order
 ### Side-by-side Barplot
 
 ```{r side by side barplot, fig.dim=c(12,5), fig.align='center'}
-(mojo_barplot <- mojo_21_long |>
+(mojo_barplot <- mojo_22_long |>
   ggplot() + 
-  geom_bar(aes(x=Month, y=med_top10gross, fill=Day), 
+  geom_bar(aes(x=Month, y=max_top10gross, fill=Day), 
            stat="identity", position="dodge") + 
   theme_classic())
 ```
@@ -506,8 +579,8 @@ Now we can add on to the plot which is a saved object in the Global Environment
 (mojo_barplot <- mojo_barplot +
   theme(legend.position ="bottom") +
   guides(fill = guide_legend(nrow = 1)) +
-  labs(x="", y="Median Daily Gross ($M)",
-       title = "Median Daily Gross of Top 10 Films by Month and Day of Week",
+  labs(x="", y="Maximum Daily Gross ($M)",
+       title = "Maximum Daily Gross of Top 10 Films by Month and Day of Week",
        caption = "Data Source: www.boxofficemojo.com"))
 ```
 
@@ -530,9 +603,9 @@ Now we can add on to the plot which is a saved object in the Global Environment
 
 class: middle
 
-### Week 3 In-class Exercises (TP L5 - Q3)
+### Week 3 In-class Exercises (L5 - Q3)
 
-***TurningPoint Session ID: bua455s22***
+***Session ID: bua455s23***
 
 **This is part of BB Question 5 in HW 3**
 
@@ -553,13 +626,13 @@ If you want a grouped barplot with **side-by-side bars**, what is the correct op
 - To make a line plot with multiple variables, we use pivot_longer to reshape the data.
 
 ```{r reshape data for a line plot}
-mojo_21_line_area <- mojo_21_mod |>
+mojo_22_line_area <- mojo_22_mod |>
   select(date, top10grossM, num1grossM) |>                  # select variables
   rename(`Top 10` = top10grossM, `No. 1` = num1grossM) |>   # rename for plot
   pivot_longer(cols=`Top 10`:`No. 1`,                       # reshape data  
                names_to = "type", values_to = "grossM") |>
   mutate(type=factor(type, levels=c("Top 10", "No. 1")))    # convert type of gross to a factor
-head(mojo_21_line_area, 4)
+head(mojo_22_line_area, 4)
 
 ```
 
@@ -568,7 +641,7 @@ head(mojo_21_line_area, 4)
 ### Line Plot
 
 ```{r basic line plot code, fig.dim=c(14,4), fig.align='center'}
-(line_plt <- mojo_21_line_area |>
+(line_plt <- mojo_22_line_area |>
   ggplot() + 
   geom_line(aes(x=date, y=grossM, color=type), size=1) + # two lines created #<<
   theme_classic())
@@ -585,7 +658,7 @@ head(mojo_21_line_area, 4)
   scale_color_manual(values=c("blue", "lightblue")) +  # specify colors   #<<
   labs(x="Date", y = "Gross ($Mill)", color="",
        title="Top 10 and No. 1 Movie Gross by Date", 
-       subtitle="Jan. 1, 2021 - Dec. 31, 2021",
+       subtitle="Jan. 1, 2022 - Dec. 31, 2022",
        caption="Data Source:www.boxoffice.mojo.com"))
 ```
 
@@ -610,7 +683,7 @@ head(mojo_21_line_area, 4)
 Change `geom_line` to `geom_area` and `color` to `fill`
 
 ```{r convert line plot to area plot}
-(area_plt <- mojo_21_line_area |>
+(area_plt <- mojo_22_line_area |>
   ggplot() + 
   geom_area(aes(x=date, y=grossM, fill=type), size=1) + # changed to geom_area and color to fill #<<
   theme_classic() + 
@@ -618,7 +691,7 @@ Change `geom_line` to `geom_area` and `color` to `fill`
   scale_fill_manual(values=c("blue", "lightblue")) +    # changed color to fill   #<<
   labs(x="Date", y = "Gross ($Mill)", color="",
        title="Top 10 and No. 1 Movie Gross by Date", 
-       subtitle="Jan. 1, 2021 - Dec. 31, 2021",
+       subtitle="Jan. 1, 2022 - Dec. 31, 2022",
        caption="Data Source:www.boxoffice.mojo.com") + 
     theme(plot.title = element_text(size = 20),
         axis.title = element_text(size=18),
@@ -632,7 +705,7 @@ Change `geom_line` to `geom_area` and `color` to `fill`
 
 ### Week 3 In-class Exercises (L6 - Q1)
 
-***NOT ON TurningPoint***
+***NOT ON PointSolutions***
 
 **Practice:**
 
@@ -649,10 +722,11 @@ Change `geom_line` to `geom_area` and `color` to `fill`
 2. Open this project by clicking on .Rproj file
 3. Open .Rmd file within open R project.
 4. Run all chunks above this exercise
-5. Modify the following chunk below to:  
-    i. Round all values in columns 2-4 of `mojo_21_fall_wknd` to 1 decimal place using `round`.  
-    ii. Export `mojo_21_fall_wknd` as a `.csv` file with your name.  
-6. Submit this .csv file with your name in the [Week 3 In-class Exercise on Blackboard](https://blackboard.syracuse.edu/webapps/blackboard/content/listContentEditable.jsp?content_id=_8223268_1&course_id=_475626_1&mode=reset) 
+5. Modify the following chunk below to:
+   i. Round all values in columns 2-4 of `mojo_22_fall_wknd` to 1 decimal place using `round`.  
+   ii. Export `mojo_22_fall_wknd` as a `.csv` file with your name.  
+<br>
+6. Submit this .csv file with your name in the **Week 3 In-class Exercise** in the **LECTURES** section on Blackboard
 
 **NOTE:** This counts as part of your in-class participation for the Week 3 lectures and due by Friday at midnight.
 
@@ -660,7 +734,7 @@ Change `geom_line` to `geom_area` and `color` to `fill`
 
 ### R Code Chunk for In-class Exercise (L6 - Q1)
 
-0. Optional Remove `, eval=F` from chunk header. This will allow code in chunk to run when it is rendered.
+0. Optional: Remove `, eval=F` from chunk header. This will allow code in chunk to run when it is rendered.
 
 1. Remove the `#` and complete `round` command to round numeric columns (columns 2 - 4) to 1 decimal place.
 
@@ -674,17 +748,17 @@ Change `geom_line` to `geom_area` and `color` to `fill`
 ```{r round and export summary dataset, eval = F}
 
 # examine data with glimpse
-mojo_21_fall_wknd |> glimpse()
+mojo_22_fall_wknd |> glimpse()
 
 # rounding columns 2, 3 and 4 only
-# mojo_21_fall_wknd[,2:4] <- round()
+# mojo_22_fall_wknd[,2:4] <- round()
   
 # export summary dataset using write_csv without piping
-write_csv(mojo_21_fall_wknd, "Movie_Gross_Fall_2021_Weekends_FirstName_Last_Name.csv")
+write_csv(mojo_22_fall_wknd, "Movie_Gross_Fall_2022_Weekends_FirstName_Last_Name.csv")
 
 # export summary dataset using write_csv with piping
-mojo_21_fall_wknd |>
-  write_csv("Movie_Gross_Fall_2021_Weekends_FirstName_Last_Name.csv")
+mojo_22_fall_wknd |>
+  write_csv("Movie_Gross_Fall_2022_Weekends_FirstName_Last_Name.csv")
 
 ```
 
@@ -694,17 +768,17 @@ class: middle
 
 ### Week 3 In-class Exercises (L6 - Q2)
 
-***NOT ON TurningPoint***
+***NOT ON PointSolutions***
 
 If all the columns in a dataset are numeric, you can round the whole dataset at once with the command `round(<name of dataset>)`.
 
-Why wouldn't that work for the dataset in the previous exercise, `mojo_21_fall_wknd`?
+Why wouldn't that work for the dataset in the previous exercise, `mojo_22_fall_wknd`?
 
 <br>
 
 Hint: To answer this question, you are encourage to 
 
-- try running the command `round(mojo_21_fall_wknd)` 
+- try running the command `round(mojo_22_fall_wknd)` 
 
 - examine the data using `glimpse` 
 
@@ -712,9 +786,9 @@ Hint: To answer this question, you are encourage to
 
 class: middle
 
-### Week 3 In-class Exercises (TP L6 - Q3)
+### Week 3 In-class Exercises (L6 - Q3)
 
-***TurningPoint Session ID: bua455s22***
+***Session ID: bua455s23***
 
 Which of the following commands should **NOT** be used within a `mutate` command or a `summarize` command?
   
@@ -754,9 +828,9 @@ class: middle
 
 In HW 3, you will group the data by quarter and week day. This is Part 4 of HW 3 and is very similar to the group_by and summarize code covered in Lecture 5.
 
-### Week 3 In-class Exercises (TP L6 - Q4)
+### Week 3 In-class Exercises (L6 - Q4)
 
-***TurningPoint Session ID: bua455s22***
+***Session ID: bua455s23***
 
 **This is BB Question 3 in HW 3**
 
@@ -799,5 +873,6 @@ Your grouped and summarized dataset, **`mojo_qtr_smry`**, has
 
 <br>
 
-**You may submit an 'Engagement Question or Comment' about Week 3 lectures until Thursday, 9/15, at midnight on Blackboard.**
+You may submit an 'Engagement Question' about each lecture until midnight on the day of the lecture. 
+**A minimum of four submissions are required during the semester.**
 

@@ -1,7 +1,7 @@
 ---
 title: "HW 3 Template"
 author: "Fill Name in"
-date: "Due 9/21/2022"
+date: "Due 2/8/2023"
 output: 
   html_document:
     toc: true
@@ -23,18 +23,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # to suppress message about import include show_col_types=F
-mojo_21 <- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |>
+mojo_22 <- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |>
   glimpse()
 
-
+ 
 # use select with ! to exclude (drop) num1 text variable
-mojo_21_mod <- mojo_21 |>
+mojo_22_mod <- mojo_22 |>
 #  select() 
 
 # create factor variables monthF and wkdayF
 # levels option specifies order (default is alphabetical)
 # labels option specifies appearance of values in data, tables and plots
-mojo_21_mod <- mojo_21_mod |>
+mojo_22_mod <- mojo_22_mod |>
   mutate(monthF = factor(month,
                          levels=c("Jan", "Feb", "Mar", "Apr", 
                                   "May", "Jun", "Jul", "Aug", 
@@ -50,7 +50,7 @@ mojo_21_mod <- mojo_21_mod |>
 # use examples above create factor variable quartF
 # remove # from the three lines below this one once R code is complete
 
-# mojo_21_mod <- mojo_21_mod |>
+# mojo_22_mod <- mojo_22_mod |>
 #   mutate(quartF = factor()) |>
 #   glimpse()
 
@@ -68,7 +68,7 @@ mojo_21_mod <- mojo_21_mod |>
 # provided code has divided top10gross and num1gross by 1 million
 # values are rounded to 2 decimal place 
 
-mojo_21_mod <- mojo_21_mod |>
+mojo_22_mod <- mojo_22_mod |>
   mutate(top10grossM = (top10gross/1000000) |> round(2),  # change scale and round
           num1grossM = (num1gross/1000000) |> round(2)) |>
   glimpse()
@@ -78,7 +78,7 @@ mojo_21_mod <- mojo_21_mod |>
 # calculate num1_pct = num1gross/top10gross * 100
 # round num1_pct to two decimal places
 
-# mojo_21_mod <- mojo_21_mod |>
+# mojo_22_mod <- mojo_22_mod |>
 #   mutate(num_releases = ,
 #          num1_pct = ) |>
 #   glimpse()
@@ -94,10 +94,11 @@ mojo_21_mod <- mojo_21_mod |>
 ```{r group and summarize Data}
 
 # group data by quartF and wkdayF and calculate the following summary statistics for each weekday in each quarter:
-#   max_num, the maximum number of releases (num_releases)
-#   mean_num1grossM, mean of the number 1 gross (num1grossM)
+# max_num, the maximum number of releases (num_releases)
+# mean_num1grossM, mean of the number 1 gross (num1grossM)
+# ungroup is NOT required at the end of this portion of code, but you are welcome to add it
 
-# mojo_qtr_smry <- mojo_21_mod |>
+# mojo_qtr_smry <- mojo_22_mod |>
 #   select(quartF, wkdayF, num_releases, num1grossM) |>
 #   group_by() |>
 #   summarize(max_num = ,
@@ -162,7 +163,7 @@ mojo_21_mod <- mojo_21_mod |>
 # basic barplot code
 # aesthetic for barplot: aes(x=Qtr, y=mean_num1grossM, fill=Day)
 # in geom_bar, after comma include these options: 
-# stat=identity, position=dodge
+# stat="identity", position="dodge"
 
 # (mojo_qtr_barplot <- mojo_qtr_long |>
 #   ggplot() +

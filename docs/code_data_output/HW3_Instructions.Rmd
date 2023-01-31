@@ -1,7 +1,7 @@
 ---
 title: "HW 3 Instructions"
 author: "Penelope Pooler Eisenbies"
-date: "HW 3 is Due 9/21/2022"
+date: "HW 3 is Due 2/8/2023"
 output: 
   html_document:
     toc: true
@@ -30,9 +30,10 @@ p_loaded()
 
 ```
 
+
 ```{r data cleaning for HW 3, echo=F, include=F, message=FALSE}
 
-bom21 <- read_csv("box_office_mojo_2021.csv", skip=11, show_col_types = FALSE) |>
+bom22 <- read_csv("box_office_mojo_2022.csv", skip=11, show_col_types = FALSE) |>
   filter(!is.na(Day)) |>
   select(Date, `Top 10 Gross`, Gross, Releases, `#1 Release`) |>
   rename(date=Date, top10gross = `Top 10 Gross`, 
@@ -43,7 +44,7 @@ bom21 <- read_csv("box_office_mojo_2021.csv", skip=11, show_col_types = FALSE) |
          num1gross = gsub(x=num1gross, pattern="$", replacement="", fixed=T),
          num1gross = gsub(x=num1gross, pattern=",", replacement="", fixed=T) |> as.numeric()) |>
   
-  mutate(date = dmy(paste(date,"2021")),
+  mutate(date = dmy(paste(date,"2022")),
          month = month(date, label=T, abbr=T),
          day = wday(date, label=T, abbr=T),
          quart = quarter(date)) |>
@@ -86,7 +87,7 @@ This assignment will give you experience with:
    
 **`2.`** Create a folder in your R project labeled **`code_data_output`**.
 
-**`3.`** Download the provided file, **[`HW3_Template.Rmd`](https://blackboard.syracuse.edu/bbcswebdav/pid-8377480-dt-content-rid-95519473_1/xid-95519473_1)** 
+**`3.`** Download the provided file, **HW3_Template.Rmd** from Blackboard
 
 **`4.`** Save the downloaded **`HW3_Template.Rmd`** file to your code_data_output folder
 
@@ -110,7 +111,7 @@ This assignment will give you experience with:
 ---
 title: "HW 3"
 authors: "Penelope Pooler"
-date: "Due 9/21/2022"
+date: "Due 2/8/2023"
 output: 
   html_document:
     toc: true
@@ -157,7 +158,7 @@ p_loaded()
 
 #### Chunk 2: Import and Modify Categorical Variables
 
-**`0.`** Import `Box_Office_Mojo_Week3_HW3.csv` and save it as `mojo21` using the provided R code in Chunk 2.
+**`0.`** Import `Box_Office_Mojo_Week3_HW3.csv` and save it as `mojo_22` using the provided R code in Chunk 2.
 
 **`1.`** Remove **`#`** (comment indicator) from in front of the **`select`** command and use **`!`** to omit the text variable, **`num1`**.
 
@@ -175,7 +176,7 @@ p_loaded()
 
 ##### **BB Question 1**
 
-After completing Part 1, the dataset, mojo_21_mod has
+After completing Part 1, the dataset, mojo_22_mod has
 
 `____` rows and 
 
@@ -245,8 +246,8 @@ When you **`glimpse`** the data after completing Part 2 (Chunk 3), the type for 
 - **`max_num`**, the maximum number of releases (num_releases):
   - **`max_num = max(num_releases, na.rm=T)`**
    
-- **`mean_num1grossM`**, mean of the number 1 gross (num1grossM)
-  - **`mean_num1grossM = mean(num1grossM, na.rm=T)`**
+- **`mean_num1grossM`**, mean of the number 1 gross (num1grossM) rounded to 2 decimal places
+  - **`mean_num1grossM = mean(num1grossM, na.rm=T) |> round(2)`**
 
 <br>
 
@@ -281,7 +282,7 @@ Use the summary dataset **`mojo_qtr_smry`** you created in Part 3 (Chunk 4)
 - 1 row for each quarter and 1 column for each weekday
    
 - to do this specify:
-  - **`id_col=quartF, names_from=wkdayF, values_from=mean_num1grossM`**
+  - **`id_cols=quartF, names_from=wkdayF, values_from=mean_num1grossM`**
 
 <br>
    
