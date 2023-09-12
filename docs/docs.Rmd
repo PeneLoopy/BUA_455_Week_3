@@ -157,41 +157,9 @@ class: bottom, right
 
 ---
 
-
-### Reminders:
-
-
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3.mt2.mb2[
-
-#### HW 2 is Due 2/1
-
-]
-
-<br>
-
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3.mt2.mb2[
-
-Textbook: A [list of useful sections can be found here](https://docs.Google.com/spreadsheets/d/1yhUSJAJQ4VVjVBpiv3_C2D3tQs2SmJjynSq9chqXOwc/edit?usp=sharing) and will be updated as the course progresses.
-
-]
-
-<br>
-
-
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3.mt2.mb2[
-
-**Syracuse University Business, Data & Technology Career Fair**
-
-- Wednesday, February 1, 2023 	3:00pm - 7:00pm
-- Schine Student Center, Goldstein Auditorium
-- Open to all students! More details are on Handshake.
-
-
-]
-
----
-
 ### Reminders from Week 2 and HW 2:
+
+#### HW 2 is Due 9/13
 
 <br>
 
@@ -398,7 +366,7 @@ mojo_22 <- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |>
 
 ### Week 3 In-class Exercises (L5 - Q1)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 Notice that in the prior chunk, we use the command `read_csv`
 
@@ -572,7 +540,7 @@ class: middle
 
 ### Week 3 In-class Exercises (L5 - Q2)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 **This is BB Question 2 in HW 3**
 
@@ -786,7 +754,7 @@ class: middle
 
 ### Week 3 In-class Exercises (L5 - Q3)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 **This is part of BB Question 5 in HW 3**
 
@@ -978,7 +946,7 @@ class: middle
 
 ### Week 3 In-class Exercises (L6 - Q3)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 Which of the following commands should **NOT** be used within a `mutate` command or a `summarize` command?
   
@@ -1020,7 +988,7 @@ In HW 3, you will group the data by quarter and week day. This is Part 4 of HW 3
 
 ### Week 3 In-class Exercises (L6 - Q4)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 **This is BB Question 3 in HW 3**
 

@@ -4,7 +4,7 @@
     <title>BUA 455 - Week 3</title>
     <meta charset="utf-8" />
     <meta name="author" content="Penelope Pooler Eisenbies" />
-    <meta name="date" content="2023-01-31" />
+    <meta name="date" content="2023-09-11" />
     <script src="docs_files/header-attrs/header-attrs.js"></script>
     <link href="docs_files/panelset/panelset.css" rel="stylesheet" />
     <script src="docs_files/panelset/panelset.js"></script>
@@ -51,47 +51,15 @@ class: bottom, right
 
 #### Penelope Pooler Eisenbies
 
-#### 2023-01-31
+#### 2023-09-11
 
 [Wikipedia Sloth Page](https://en.wikipedia.org/wiki/Sloth)
 
 ---
 
-
-### Reminders:
-
-
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3.mt2.mb2[
-
-#### HW 2 is Due 2/1
-
-]
-
-&lt;br&gt;
-
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3.mt2.mb2[
-
-Textbook: A [list of useful sections can be found here](https://docs.Google.com/spreadsheets/d/1yhUSJAJQ4VVjVBpiv3_C2D3tQs2SmJjynSq9chqXOwc/edit?usp=sharing) and will be updated as the course progresses.
-
-]
-
-&lt;br&gt;
-
-
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3.mt2.mb2[
-
-**Syracuse University Business, Data &amp; Technology Career Fair**
-
-- Wednesday, February 1, 2023 	3:00pm - 7:00pm
-- Schine Student Center, Goldstein Auditorium
-- Open to all students! More details are on Handshake.
-
-
-]
-
----
-
 ### Reminders from Week 2 and HW 2:
+
+#### HW 2 is Due 9/13
 
 &lt;br&gt;
 
@@ -379,7 +347,7 @@ mojo_22 &lt;- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |&gt;
 
 ### Week 3 In-class Exercises (L5 - Q1)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 Notice that in the prior chunk, we use the command `read_csv`
 
@@ -595,16 +563,15 @@ head(mojo_22_mod)
 
 ```
 ## # A tibble: 6 × 10
-##   date       monthF wkdayF quart num_r…¹ num1g…² num1g…³ top10…⁴ top10…⁵ num1pct
-##   &lt;date&gt;     &lt;fct&gt;  &lt;fct&gt;  &lt;dbl&gt;   &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 2022-12-31 Dec    Sa         4      30  1.81e7    18.0  2.80e7    28.0    64.6
-## 2 2022-12-30 Dec    F          4      30  2.48e7    24.8  3.79e7    37.9    65.5
-## 3 2022-12-29 Dec    Th         4      27  2.01e7    20.1  3.12e7    31.2    64.5
-## 4 2022-12-28 Dec    W          4      27  2.06e7    20.6  3.19e7    31.9    64.6
-## 5 2022-12-27 Dec    T          4      27  2.41e7    24.1  3.73e7    37.3    64.6
-## 6 2022-12-26 Dec    M          4      28  3.23e7    32.3  4.70e7    47.0    68.7
-## # … with abbreviated variable names ¹​num_releases, ²​num1gross, ³​num1grossM,
-## #   ⁴​top10gross, ⁵​top10grossM
+##   date       monthF wkdayF quart num_releases num1gross num1grossM top10gross
+##   &lt;date&gt;     &lt;fct&gt;  &lt;fct&gt;  &lt;dbl&gt;        &lt;int&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+## 1 2022-12-31 Dec    Sa         4           30  18053159       18.0   27962493
+## 2 2022-12-30 Dec    F          4           30  24836835       24.8   37900613
+## 3 2022-12-29 Dec    Th         4           27  20117061       20.1   31204428
+## 4 2022-12-28 Dec    W          4           27  20582014       20.6   31866473
+## 5 2022-12-27 Dec    T          4           27  24128503       24.1   37343124
+## 6 2022-12-26 Dec    M          4           28  32270430       32.3   46963277
+## # ℹ 2 more variables: top10grossM &lt;dbl&gt;, num1pct &lt;dbl&gt;
 ```
 
 
@@ -619,7 +586,7 @@ class: middle
 
 ### Week 3 In-class Exercises (L5 - Q2)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 **This is BB Question 2 in HW 3**
 
@@ -967,7 +934,7 @@ class: middle
 
 ### Week 3 In-class Exercises (L5 - Q3)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 **This is part of BB Question 5 in HW 3**
 
@@ -1177,7 +1144,7 @@ class: middle
 
 ### Week 3 In-class Exercises (L6 - Q3)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 Which of the following commands should **NOT** be used within a `mutate` command or a `summarize` command?
   
@@ -1219,7 +1186,7 @@ In HW 3, you will group the data by quarter and week day. This is Part 4 of HW 3
 
 ### Week 3 In-class Exercises (L6 - Q4)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 **This is BB Question 3 in HW 3**
 

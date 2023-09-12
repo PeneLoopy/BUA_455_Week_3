@@ -139,6 +139,7 @@ mojo_qtr_smry <- mojo_22_mod |>
 # 1 column for each day of the week
 # 4 rows, 1 for each quarter of the year
 
+
 mojo_qtr_wide <- mojo_qtr_smry |>
   pivot_wider(id_cols=quartF, names_from=wkdayF, values_from=mean_num1grossM) |>
   rename(Qtr = quartF) 

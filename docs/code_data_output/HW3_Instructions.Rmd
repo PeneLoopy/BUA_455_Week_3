@@ -1,7 +1,7 @@
 ---
 title: "HW 3 Instructions"
 author: "Penelope Pooler Eisenbies"
-date: "HW 3 is Due 2/8/2023"
+date: "HW 3 is Due 9/20/2023"
 output: 
   html_document:
     toc: true
@@ -93,12 +93,18 @@ This assignment will give you experience with:
 
 - Change file name to be **`HW3_FirstName_LastName.Rmd`**
 
-  - For example, I would change the template file to be named **`HW3_Penelope_Pooler.Rmd`**
+- For example, I would change the template file to be named **`HW3_Penelope_Pooler.Rmd`**
    
 - Change title in the file header to be 'HW 3'
    
 - Specify yourself as the author
    
+<br>
+
+**`5`** Save the provided data file **`Box_Office_Mojo_Week3_HW3.csv`** into your code_data_output folder of this project.
+
+- Note: that these data are already **clean** and useable but they will be modified in the steps below.
+
 <br>
 
 **NOTES** 
@@ -111,7 +117,7 @@ This assignment will give you experience with:
 ---
 title: "HW 3"
 authors: "Penelope Pooler"
-date: "Due 2/8/2023"
+date: "Due 9/20/2023"
 output: 
   html_document:
     toc: true
@@ -121,7 +127,7 @@ output:
 
 ```
 
-**`5.`** Modify the **`setup`** chunk 
+**`6.`** Modify the **`setup`** chunk 
 
 - The **`setup`** chunk text shown below has packages and setup options for HW 3.
 
@@ -150,7 +156,7 @@ p_loaded()
 ```
 <br>
 
-**`6.`** Click the green triangle or type Ctrl/Cmd + Shift + Enter to run this setup chunk.
+**`7.`** Click the green triangle or type Ctrl/Cmd + Shift + Enter to run this setup chunk.
 
 ---
 
@@ -391,7 +397,7 @@ Based on the barplot created in Part 5 (Chunk 6), which day of the week has the 
 
 **`5.`** Zip your entire Project Directory into a compressed File and submit it.
 
-- The zipped R Porject should be named **`HW 3 FirstName LastName`**.
+- The zipped R Project should be named **`HW 3 FirstName LastName`**.
 - The zipped project directory should contain:
   - The completed README file 
   - The .Rproj file
