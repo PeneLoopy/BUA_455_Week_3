@@ -1,183 +1,56 @@
 ---
-title: "BUA 455 - Week 3"
-
-subtitle: "Reshaping and Summarizing Data"  
+title: "BUA 455 - Week 3: Reshaping and Summarizing Data"
 author: "Penelope Pooler Eisenbies"
-date: '`r Sys.Date()`'
-output:
-  xaringan::moon_reader:
-    seal: false
-    css: xaringan-themer.css
-    nature:
-      slideNumberFormat: "%current%/%total%" 
-      highlightStyle: tomorrow-night-bright
-      highlightLines: true
-      ratio: 16:9
-      countIncrementalSlides: true
-      keep_md: true
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    code_folding: hide
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
 ---
 
-```{r setup, include=FALSE, echo=FALSE}
-options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(
-  fig.retina=2,
-  #out.width = "75%",
-  #out.height = "50%",
-  htmltools.preserve.raw = FALSE,      # needed for windows
-  scipen=100,                          # suppresses scientific notation
-  getSymbols.warning4.0 = FALSE,       # suppresses getSymbols warnings
-  cache = FALSE,
-  echo = TRUE,
-  hiline = TRUE,
-  message = FALSE, 
-  warning = FALSE
-)
+ 
+```{r setup, include=TRUE}
 
+# this line specifies options for default options for all R Chunks
+knitr::opts_chunk$set(echo=T, 
+                      highlight=T)
 
-# install helper package (pacman)
-# pacman loads and installs other packages, if needed
+# suppress scientific notation
+options(scipen=100)
+
+# install helper package (pacman) if needed
 if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
 
 # install and load required packages
 # pacman should be first package in parentheses and then list others
-pacman::p_load(pacman, tidyverse, gridExtra, magrittr, lubridate, 
-               knitr, kableExtra)
+pacman::p_load(pacman, tidyverse, gridExtra, magrittr, lubridate, kableExtra)
 
 # verify packages (comment out in finished documents)
 p_loaded()
 
-
 ```
-
-```{r xaringan-themer, include=FALSE, warning=FALSE}
-library(xaringanthemer)
-
-palette <- c(
-  SU_Orange1        = "#F76900",
-  SU_Orange2        = "#FF8E00",
-  SU_Red_Orange     = "#FF431B",
-  SU_Blue1          = "#000E54",
-  SU_Blue2          = "#203299",
-  SU_Light_Blue     = "#2B72D7",
-  SU_White          = "#FFFFFF",
-  SU_Light_Gray     = "#ADB3B8",
-  SU_Medium_Gray    = "#707780",
-  SU_Black          = "#000000", 
-  
-  steel_blue        = "#4682B4",
-  corn_flower_blue  = "#6495ED",
-  deep_sky_blue     = "#00BFFF",
-  dark_magenta      = "#8B008B",
-  medium_orchid     = "#BA55D3",
-  lime_green        = "#32CD32",
-  light_sea_green   = "#20B2AA",
-  chartreuse        = "#7FFF00",
-  orange_red        = "#FF4500",
-  white_smoke       = "#F5F5F5",
-  dark_cyan         = "#008B8B",
-  light_steel_blue  = "#B0C4DE",
-  indigo            = "#4B0082",
-  ivory             = "#FFFFF0",
-  light_slate_grey  = "#778899",
-  linen             = "#FAF0E6",
-  steel_blue        = "#4682B4",
-  blue_violet       = "#8A2BE2",
-  dodger_blue       = "#1E90FF",
-  light_blue        = "#ADD8E6",
-  azure             = "#F0FFFF",
-  lavender          = "#E6E6FA")
-
-primary_color = "#4682B4"                # steel_blue
-secondary_color = "#778899"              # light_slate_grey
-white_color = "#FFFFF0"                  # ivory
-black_color = "#000080"                  # navy
-
-style_duo_accent(
-  primary_color = primary_color,
-  secondary_color = secondary_color,
-  white_color = white_color,
-  black_color = black_color,
-  text_color = black_color,
-  header_color = primary_color,
-  background_color = white_color,
-  code_inline_background_color = "#E6E6FA", # lavender
-  link_color = "#1E90FF",                   # dodger_blue
-  code_inline_color = "#4B0082",            # indigo
-  text_bold_color = "#8B008B",              # dark_magenta
-  header_font_google = google_font("Open Sans"),
-  text_font_google = google_font("Open Sans"),
-  code_font_google = google_font("Source Code Pro"),
-  colors = palette
-)
-
-
-```
-
-```{r xaringan-panelset, echo=FALSE}
-xaringanExtra::use_panelset()
-```
-
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
-```
-
-```{r xaringan-fit-screen, echo=FALSE}
-xaringanExtra::use_fit_screen()
-```
-
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons()
-```
-
-```{r xaringan-animate-css, echo=FALSE}
-xaringanExtra::use_animate_css()
-```
-
-```{r xaringan-animate-all, echo=FALSE}
-#xaringanExtra::use_animate_all("slide_up")
-```
-
-background-image: url("docs_files/images/sloth_faded.png")
-background-size: cover
-
-class: bottom, right
-
-## BUA 455 - Week 3
-
-### Reshaping and Summarizing Data  
-
-<br>
-
-
-#### Penelope Pooler Eisenbies
-
-#### `r Sys.Date()`
-
-[Wikipedia Sloth Page](https://en.wikipedia.org/wiki/Sloth)
 
 ---
 
 ### Reminders from Week 2 and HW 2:
 
-#### HW 2 is Due 1/31
+#### HW 2 is Due 9/13
 
-<br>
+##### `dplyer` commands:
 
-#####`dplyer` commands:
-
-  - `select`  - used to select variables (columns) of a dataset
-  - `slice`   - used to select rows by row number
-  - `filter`  - used to filter data rows by values of a variable
-  - `mutate`  - to create or transform a variable
-  
-<br>
+- `select`  - used to select variables (columns) of a dataset
+- `slice`   - used to select rows by row number
+- `filter`  - used to filter data rows by values of a variable
+- `mutate`  - to create or transform a variable
   
 ##### `ggplot` introduction:
 
-  - basic syntax and aesethetics statements (`aes`)
-  - creating a basic boxplot (`geom_boxplot`) or scatterplot (`geom_point`)
-  - removing default background by modifying the theme
-  - adding a a third categorical variable to color the data by category
+- basic syntax and aesthetics statements (`aes`)
+- creating a basic boxplot (`geom_boxplot`) or scatterplot (`geom_point`)
+- removing default background by modifying the theme
+- adding a a third categorical variable to color the data by category
   
 ---
 
@@ -185,7 +58,6 @@ class: bottom, right
 
 The R command **[relocate](https://dplyr.tidyverse.org/reference/relocate.html)** in the `dplyr` package can be used to reorder variables by type
 
-.pull-left[
 
 ```{r starwars numeric vars first}
 
@@ -197,9 +69,7 @@ my_starwars <- starwars |>
 ```
 
 
-]
-
-.pull-right[
+<br>
 
 ```{r starwars character vars first}
 
@@ -209,8 +79,6 @@ my_starwars <- starwars |>
   glimpse(width=40)
 
 ```
-]
-
 
 
 ---
@@ -224,9 +92,9 @@ my_starwars <- starwars |>
   
 - Coercing data to be a new data type
   
-- Grouping, summarizing, and filtering data
-
-- Reshaping data for a summary table **OR** reshaping data for a plot
+- Summarizing data and reshaping data for a summary table
+  
+- Reshaping data for a plot
 
   
 #### Preview of 'cleaning' messy
@@ -240,10 +108,7 @@ my_starwars <- starwars |>
 
 ---
 
-
-.panelset[
-
-.panel[.panel-name[**Original Data**]
+### Original Data
 
 Online Data are often formatted for viewing, not using.
 
@@ -251,26 +116,23 @@ Online Data are often formatted for viewing, not using.
 
 .center[
 
-![Box Office Mojo daily data from 2022](docs_files/images/bom22_screenshot.png)
+![Box Office Mojo daily data from 2022](bom22_screenshot.png)
 
-]
+
 
 [Data Source: Box Office Mojo](https://www.boxofficemojo.com/daily/2022/?view=year)
 
-]
+---
 
-.panel[.panel-name[**Raw Data (.csv)**]
+### Raw Data (.csv)
 
 Copying data from a website and saving them as a .csv file (CSV UTF-8) removes most of the formatting, but data cleaning is still required.
 
-.center[
+![Box Office Mojo daily data from 2022 saved as .csv file](bom22_rawdata_screenshot.png){height=65%}
 
-![Box Office Mojo daily data from 2022 saved as .csv file](docs_files/images/bom22_rawdata_screenshot.png){height=65%}
-]
+---
 
-]
-
-.panel[.panel-name[**Import, Select, Filter**]
+### Import, Select, Filter
 
 - `read_csv` imports the raw data and skips the first 11 rows (above the variable names).
 
@@ -284,7 +146,7 @@ Copying data from a website and saving them as a .csv file (CSV UTF-8) removes m
 
 ```{r}
 
-bom22 <- read_csv("box_office_mojo_2022.csv", skip=11, show_col_types = FALSE) |>
+bom22 <- read_csv("code_data_output/box_office_mojo_2022.csv", skip=11, show_col_types = FALSE) |>
   filter(!is.na(Day)) |>
   select(Date, `Top 10 Gross`, Gross, Releases, `#1 Release`) |>
   rename(date=Date, top10gross = `Top 10 Gross`, 
@@ -293,9 +155,9 @@ head(bom22)
 
 ```
 
-]
+---
 
-.panel[.panel-name[**Clean Numeric Data**]
+### Clean Numeric Data
 
 - The two **Gross** variables both contained `$` and `,` symbols that were removed with `gsub`.
 
@@ -313,31 +175,27 @@ bom22 <- bom22 |>
 head(bom22)
 ```
 
-]
+---
 
-.panel[.panel-name[**Date Variables**]
+### Date Variables
 
 - Dealing with date variables used to be much more difficult (prior to `lubridate` package).
 
-   - Dates are still troublesome in most other software
-   
+- Dates are still troublesome in most other software
+
 - Below we create a date variable from the provided character variable, create other variables, examine data and export the dataset.
 
 ```{r date variables modified with lubridate}
 bom22 <- bom22 |>
-  mutate(date = dmy(paste(date,"-","2022")), # year is required
-                                             #we paste it (add it as text) to each date
+  mutate(date = dmy(paste(date,"-","2022")), # year is required so we paste it (add it as text) to each date
          month = month(date, label=T, abbr=T),
          day = wday(date, label=T, abbr=T),
          quart = quarter(date)) |>
   select(date, month, day, quart, top10gross:num1) |>  # select and reorder variables
   glimpse() |>                                         # examine data
   write_csv("Box_Office_Mojo_Week3_HW3.csv")           # export using write_csv
+
 ```
-
-]
-
-]
 
 ---
 
@@ -358,7 +216,6 @@ bom22 <- bom22 |>
 ```{r import and examine cleaned data}
 mojo_22 <- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |>
   glimpse(width=60)
-
 ```
 
 
@@ -366,7 +223,7 @@ mojo_22 <- read_csv("Box_Office_Mojo_Week3_HW3.csv", show_col_types=F) |>
 
 ### Week 3 In-class Exercises (L5 - Q1)
 
-***Session ID: bua455f24***
+***Session ID: bua455f23***
 
 Notice that in the prior chunk, we use the command `read_csv`
 
@@ -386,9 +243,7 @@ Notice that in the prior chunk, we use the command `read_csv`
 
 ---
 
-.panelset[
-
-.panel[.panel-name[**Categorical Data Management**]
+### Categorical Data Management
 
 This data set is **ALMOST** ready to work with BUT there are few tasks we will cover:
 
@@ -416,24 +271,35 @@ In HW Assignment 3:
    
 - Create a publication quality table showing data by week day and quarter.
 
-]
+---
 
-.panel[.panel-name[**Exclude `num1`**]
+### Exclude `num1`
 
 Recall that we use `!` to exclude a variable or filter out observations
 
 ```{r excluding a variable}
-
 mojo_22_mod <- mojo_22 |>            # save as new dataset 
   select(!num1) |>                   # excludes text variable num1 #<<
   glimpse()
 
+
+mojo_22_mod <- mojo_22_mod |>
+  mutate(top10gross = gsub(x=top10gross, pattern="$", replacement="", fixed=T),
+         top10gross = gsub(x=top10gross, pattern=",", replacement="", fixed=T) |> 
+           as.numeric(),
+         num1gross = gsub(x=num1gross, pattern="$", replacement="", fixed=T),
+         num1gross = gsub(x=num1gross, pattern=",", replacement="", fixed=T) |> 
+           as.numeric())
+head(mojo_22_mod)
+
+
+      # export using write_csv
 ```
 
 
-]
+---
 
-.panel[.panel-name[**Create factor variables**]
+### Create factor variables
 
 The `factor` command is used with `mutate` to create **TWO** factor variables
 - `levels` option specifies **order**
@@ -448,12 +314,13 @@ mojo_22_mod <- mojo_22_mod |>
                          levels=c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
                          labels= c("M", "T", "W", "Th", "F", "Sa", "Su"))) |>
   glimpse()
-
 ```
 
 ]
 
-.panel[.panel-name[**Examine New Factor Variables**]
+---
+
+### Examine New Factor Variables
 
 We can use `unique` or `summary` to examine the new variables `monthF` and `wkdayF`
 
@@ -470,17 +337,9 @@ mojo_22_mod |> select(month, monthF, day, wkdayF) |> summary()
 
 ```
 
-
-
-]
-
-]
-
 ---
 
-.panelset[
-
-.panel[.panel-name[**Numerical Data Management**]
+##3 Numerical Data Management
 
 - The `mutate` command can contain many separate statements.
 
@@ -506,9 +365,9 @@ In the next chunk we will:
   
   - Within `mutate` command: `num_releases = as.integer(num_releases)`
 
-]
+---
 
-.panel[.panel-name[**R code for Numerical Data Management**]
+### R code for Numerical Data Management
 
 **Note:** Variables are rounded to two decimal values by using piping and `round(2)`
 
@@ -528,19 +387,13 @@ mojo_22_mod <- mojo_22_mod |>
 head(mojo_22_mod)
 ```
 
-
-]
-
-]
-
 ---
-
 
 class: middle
 
 ### Week 3 In-class Exercises (L5 - Q2)
 
-***Session ID: bua455f24***
+***Session ID: bua455f23***
 
 **This is BB Question 2 in HW 3**
 
@@ -604,19 +457,18 @@ mojo_22_smry <- mojo_22_mod |>
 
 ---
 
+
 ### Reshape Data using `pivot_wider`
 
 - A common task in data management is reshaping data
 
-- Display data tables must be compact for presentation
+- Dislay data tables must be compact for presentation
 
 ```{r reshape data using pivot_wider}
-
 mojo_22_wide <- mojo_22_smry |>
   pivot_wider(id_cols=monthF, names_from=wkdayF, values_from=max_top10gross) |>
   rename(Month = monthF)
 head(mojo_22_wide)
-
 ```
 
 
@@ -628,8 +480,6 @@ Below are two options for for displaying a small dataset in tabular formats.
 
 
 - **Note:** Appearance of default kable tables differs for slides, word documents, and html files
-
-.pull-left[
 
 #### Basic Table with `kable` 
 
@@ -643,9 +493,6 @@ mojo_22_fall_wknd |>
   kable()
 ```
 
-]
-
-.pull-right[
 
 #### `kable` Table with styling
 
@@ -658,8 +505,6 @@ mojo_22_fall_wknd |>
 ```
 
 
-]
-
 ---
 
 ### Reshaping Data using `pivot_longer`
@@ -668,6 +513,7 @@ mojo_22_fall_wknd |>
 
 .pull-left[
 #### `pivot_longer` R code
+
 ```{r pivot longer R code}
 mojo_22_long <- mojo_22_wide |>
   pivot_longer(cols=M:Su, names_to="Day", 
@@ -675,22 +521,18 @@ mojo_22_long <- mojo_22_wide |>
 head(mojo_22_long, 10)
 ```
 
-]
 
-.pull-right[
 #### basic `geom_bar` barplot R code
+
 ```{r basic stacked barplot, fig.dim=c(5,4)}
 (mojo_barplot <- mojo_22_long |> ggplot() + 
   geom_bar(aes(x=Month, y=max_top10gross, fill=Day), 
            stat="identity"))
 ```
 
-]
-
 ---
-.panelset[
 
-.panel[.panel-name[** Stacked Barplot**]
+### Stacked Barplot
 
 ```{r stacked barplot no background, fig.dim=c(8,5), fig.align='center'}
 mojo_22_long <- mojo_22_long |> # Day converted to factor to specify order
@@ -701,9 +543,9 @@ mojo_22_long <- mojo_22_long |> # Day converted to factor to specify order
   theme_classic())
 ```
 
-]
+---
 
-.panel[.panel-name[** Side-by-side Barplot**]
+### Side-by-side Barplot
 
 ```{r side by side barplot, fig.dim=c(12,5), fig.align='center'}
 (mojo_barplot <- mojo_22_long |>
@@ -713,12 +555,12 @@ mojo_22_long <- mojo_22_long |> # Day converted to factor to specify order
   theme_classic())
 ```
 
+---
 
-]
-
-.panel[.panel-name[**Labels Formatted**]
+### Labels Formatted
 
 Now we can add on to the plot which is a saved object in the Global Environment
+
 ```{r adding label formatting to barplot, fig.dim=c(12,5), fig.align='center'}
 (mojo_barplot <- mojo_barplot +
   theme(legend.position ="bottom") +
@@ -728,10 +570,10 @@ Now we can add on to the plot which is a saved object in the Global Environment
        caption = "Data Source: www.boxofficemojo.com"))
 ```
 
+---
 
-]
+### Spectral Palette with Text Resized
 
-.panel[.panel-name[**Spectral Palette with Text Resized**]
 ```{r final plot with spectral palette and text size adjusted, fig.dim=c(12,5), fig.align='center'}
 (mojo_barplot <- mojo_barplot + 
     scale_fill_brewer(palette = "Spectral") +
@@ -743,18 +585,13 @@ Now we can add on to the plot which is a saved object in the Global Environment
         plot.background = element_rect(colour = "darkgrey", fill=NA, size=2)))
 ```
 
-]
-
-]
-
 ---
-
 
 class: middle
 
 ### Week 3 In-class Exercises (L5 - Q3)
 
-***Session ID: bua455f24***
+***Session ID: bua455f23***
 
 **This is part of BB Question 5 in HW 3**
 
@@ -782,13 +619,12 @@ mojo_22_line_area <- mojo_22_mod |>
                names_to = "type", values_to = "grossM") |>
   mutate(type=factor(type, levels=c("Top 10", "No. 1")))    # convert type of gross to a factor
 head(mojo_22_line_area, 4)
+
 ```
 
 ---
 
-.panelset[
-
-.panel[.panel-name[**Line Plot**]
+### Line Plot
 
 ```{r basic line plot code, fig.dim=c(14,4), fig.align='center'}
 (line_plt <- mojo_22_line_area |>
@@ -798,9 +634,9 @@ head(mojo_22_line_area, 4)
 ```
 
 
-]
+---
 
-.panel[.panel-name[**Labels & Colors Formatted**]
+### Labels & Colors Formatted
 
 ```{r line plot with labels formatted, fig.dim=c(14,5), fig.align='center'}
 (line_plt <- line_plt + 
@@ -812,9 +648,9 @@ head(mojo_22_line_area, 4)
        caption="Data Source:www.boxoffice.mojo.com"))
 ```
 
-]
+---
 
-.panel[.panel-name[**Resize Text**]
+### Resize Text
 
 ```{r line plot with text size adjusted, fig.dim=c(14,5), fig.align='center'}
 (line_plt <- line_plt +
@@ -826,19 +662,20 @@ head(mojo_22_line_area, 4)
         plot.background = element_rect(colour = "darkgrey", fill=NA, size=2)))
 ```
 
-]
+---
 
-.panel[.panel-name[**Complete Area Plot Code**]
+### Complete Area Plot Code
+
 Change `geom_line` to `geom_area` and `color` to `fill`
 
 ```{r convert line plot to area plot}
-area_plt <- mojo_22_line_area |>
+(area_plt <- mojo_22_line_area |>
   ggplot() + 
   geom_area(aes(x=date, y=grossM, fill=type), size=1) + # changed to geom_area and color to fill #<<
   theme_classic() + 
   theme(legend.position="bottom") +                    
   scale_fill_manual(values=c("blue", "lightblue")) +    # changed color to fill   #<<
-  labs(x="Date", y = "Gross ($Mill)", fill="",
+  labs(x="Date", y = "Gross ($Mill)", color="",
        title="Top 10 and No. 1 Movie Gross by Date", 
        subtitle="Jan. 1, 2022 - Dec. 31, 2022",
        caption="Data Source:www.boxoffice.mojo.com") + 
@@ -847,24 +684,14 @@ area_plt <- mojo_22_line_area |>
         axis.text = element_text(size=15),
         plot.caption = element_text(size = 10),
         legend.text = element_text(size = 12),
-        plot.background = element_rect(colour = "darkgrey", fill=NA, size=2))
+        plot.background = element_rect(colour = "darkgrey", fill=NA, size=2)))
 ```
-
-]
-
-.panel[.panel-name[Area Plot]
-
-```{r final area plot only, fig.dim=c(14,7), echo=F, fig.align='center'}
-area_plt
-```
-
-]
-
-]
 
 ---
 
-### Week 3 In-class Exercises (L6 - Q1) - NOT ON PointSolutions
+### Week 3 In-class Exercises (L6 - Q1)
+
+***NOT ON PointSolutions***
 
 **Practice:**
 
@@ -893,15 +720,15 @@ area_plt
 
 ### R Code Chunk for In-class Exercise (L6 - Q1)
 
-**`0.`** Optional Remove `, eval=F` from chunk header. This will allow code in chunk to run when it is rendered.
+0. Optional: Remove `, eval=F` from chunk header. This will allow code in chunk to run when it is rendered.
 
-**`1.`** Remove the `#` and complete `round` command to round numeric columns (columns 2 - 4) to 1 decimal place.
+1. Remove the `#` and complete `round` command to round numeric columns (columns 2 - 4) to 1 decimal place.
 
-**`2.`** Choose EITHER of the `write_csv` commands and edit it so dataset will be exported to `code_data_output` folder with your name.
+2. Choose EITHER of the `write_csv` commands and edit it so dataset will be exported to `code_data_output` folder with your name.
 
-**`3.`** Delete `write_csv` command you don't edit or put `#` symbols in front of it.
+3. Delete `write_csv` command you don't edit or put `#` symbols in front of it.
 
-**`4.`** Submit `.csv file` with your name
+4. Submit `.csv file` with your name
 
 
 ```{r round and export summary dataset, eval = F}
@@ -910,13 +737,14 @@ area_plt
 mojo_22_fall_wknd |> glimpse()
 
 # rounding columns 2, 3 and 4 only
+# mojo_22_fall_wknd[,2:4] <- round()
   
 # export summary dataset using write_csv without piping
-write_csv(mojo_22_fall_wknd, "Movie_Gross_Fall_2022_Weekends_FirstName_Last_Name.csv")
+write_csv(mojo_22_fall_wknd, "Movie_Gross_Fall_2022_Weekends_Max_Gargurevich.csv")
 
 # export summary dataset using write_csv with piping
 mojo_22_fall_wknd |>
-  write_csv("Movie_Gross_Fall_2022_Weekends_FirstName_Last_Name.csv")
+  write_csv("Movie_Gross_Fall_2022_Weekends_Max_Gargurevich.csv")
 
 ```
 
@@ -946,7 +774,7 @@ class: middle
 
 ### Week 3 In-class Exercises (L6 - Q3)
 
-***Session ID: bua455f24***
+***Session ID: bua455f23***
 
 Which of the following commands should **NOT** be used within a `mutate` command or a `summarize` command?
   
@@ -988,7 +816,7 @@ In HW 3, you will group the data by quarter and week day. This is Part 4 of HW 3
 
 ### Week 3 In-class Exercises (L6 - Q4)
 
-***Session ID: bua455f24***
+***Session ID: bua455f23***
 
 **This is BB Question 3 in HW 3**
 
@@ -1001,16 +829,7 @@ Your grouped and summarized dataset, **`mojo_qtr_smry`**, has
 `____` summary numeric variables
 
 ---
-
-
-background-image: url("docs_files/images/tired_panda_faded.png")
-background-size: cover
-
-.pull-left[
-
 ### **Key Points from Week 3**
-
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph2[
 
 **Summarizing Data by Group**
 
@@ -1021,6 +840,8 @@ background-size: cover
    - Within summarize specify type:
    
    - .e.g. `mean`, `meadian`, `max`, etc.
+   
+<br>
 
 **Reshaping Data for Different Purposes**
 
@@ -1028,21 +849,16 @@ background-size: cover
 
 - `pivot_longer` is useful for plots
 
+<br>
+
 **Plotting Data**
 
 - grouped barplots (stacked and side-by-side)
 
 - line plots and area plots
 
-]
+<br>
 
-]
-
-.pull-right[
-
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3[
-You may submit an 'Engagement Question' about each lecture until midnight on the day of the lecture. **A minimum of four submissions are required during the semester.**
-]
-
-]
+You may submit an 'Engagement Question' about each lecture until midnight on the day of the lecture. 
+**A minimum of four submissions are required during the semester.**
 
