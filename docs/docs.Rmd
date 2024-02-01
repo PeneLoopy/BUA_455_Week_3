@@ -882,18 +882,19 @@ area_plt
 3. Open .Rmd file within open R project.
 4. Run all chunks above this exercise
 5. Modify the following chunk below to:
+ 
    i. Round all values in columns 2-4 of `mojo_22_fall_wknd` to 1 decimal place using `round`.  
    ii. Export `mojo_22_fall_wknd` as a `.csv` file with your name.  
-<br>
+
 6. Submit this .csv file with your name in the **Week 3 In-class Exercise** in the **LECTURES** section on Blackboard
 
-**NOTE:** This counts as part of your in-class participation for the Week 3 lectures and due by Friday at midnight.
+**NOTE:** This counts as part of your in-class participation for the Week 3 lectures (due Fri. at midnight).
 
 ---
 
 ### R Code Chunk for In-class Exercise (L6 - Q1)
 
-**`0.`** Optional Remove `, eval=F` from chunk header. This will allow code in chunk to run when it is rendered.
+**`0.`** Remove `, eval=F` from chunk header. This will allow code in chunk to run when it is rendered.
 
 **`1.`** Remove the `#` and complete `round` command to round numeric columns (columns 2 - 4) to 1 decimal place.
 

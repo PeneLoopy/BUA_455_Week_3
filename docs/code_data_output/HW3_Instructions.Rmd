@@ -1,7 +1,7 @@
 ---
 title: "HW 3 Instructions"
 author: "Penelope Pooler Eisenbies"
-date: "HW 3 is Due 9/20/2023"
+date: "HW 3 is Due 2/7/2024"
 output: 
   html_document:
     toc: true
@@ -117,7 +117,7 @@ This assignment will give you experience with:
 ---
 title: "HW 3"
 authors: "Penelope Pooler"
-date: "Due 9/20/2023"
+date: "Due 2/7/2024"
 output: 
   html_document:
     toc: true
